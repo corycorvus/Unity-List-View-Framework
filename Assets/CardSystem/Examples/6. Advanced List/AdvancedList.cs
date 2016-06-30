@@ -8,7 +8,9 @@ namespace CardSystem {
 	    public GameObject[] models;
 
         readonly Dictionary<string, ModelPool> _models = new Dictionary<string, ModelPool>();
-        readonly Dictionary<string, Vector3> templateSizes = new Dictionary<string, Vector3>(); 
+        readonly Dictionary<string, Vector3> templateSizes = new Dictionary<string, Vector3>();
+	    private float scrollReturn = float.MaxValue;
+	    private float itemHeight;
 
         protected override void Setup() {
 			base.Setup();
@@ -60,19 +62,23 @@ namespace CardSystem {
         protected override void UpdateItems() {
             float totalOffset = 0;
             UpdateRecursively(data, ref totalOffset);
+            totalOffset -= itemHeight;
+            if (totalOffset < -scrollOffset) {
+                scrollReturn = -totalOffset;
+            }
         }
 
 	    void UpdateRecursively(AdvancedListItemData[] data, ref float totalOffset) {
             foreach (AdvancedListItemData item in data) {
-                float currentHeight = templateSizes[item.template].y;
-	            if (totalOffset + scrollOffset + currentHeight < 0) {
+                itemHeight = templateSizes[item.template].y;
+	            if (totalOffset + scrollOffset + itemHeight < 0) {
 	                ExtremeLeft(item);
 	            } else if (totalOffset + scrollOffset > range) {
 	                ExtremeRight(item);
 	            } else {
 	                ListMiddle(item, totalOffset + scrollOffset);
 	            }
-                totalOffset += currentHeight;
+                totalOffset += itemHeight;
 	            if (item.children != null) {
 	                if (item.expanded) {
 	                    UpdateRecursively(item.children, ref totalOffset);
@@ -92,6 +98,16 @@ namespace CardSystem {
         protected void Positioning(Transform t, float offset) {
             t.position = leftSide + offset * Vector3.down;
         }
+
+	    public void OnStopScrolling() {
+	        if (scrollOffset > 0) {
+	            scrollOffset = 0;
+	        }
+	        if (scrollReturn < float.MaxValue) {
+	            scrollOffset = scrollReturn;
+	            scrollReturn = float.MaxValue;
+	        }
+	    }
 
         void RecycleChildren(AdvancedListItemData data) {
             foreach (AdvancedListItemData child in data.children) {

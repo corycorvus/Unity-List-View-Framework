@@ -42,4 +42,8 @@ public class AdvancedListInputHandler : ListViewScroller {
         if (scrolling)
             listView.scrollOffset = startOffset + startPosition.y - position.y;
     }
+    protected override void StopScrolling() {
+        base.StopScrolling();
+        ((AdvancedList)listView).OnStopScrolling();
+    }
 }

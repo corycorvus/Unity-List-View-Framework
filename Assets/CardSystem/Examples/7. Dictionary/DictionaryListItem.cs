@@ -14,8 +14,8 @@ namespace CardSystem {
         }
     }
 
-//[System.Serializable]     //Will cause warnings, but helpful for debugging
-    public class DictionaryListItemData : ListViewItemNestedData<DictionaryListItemData> {
+    [System.Serializable]     //Will cause warnings, but helpful for debugging
+    public class DictionaryListItemData : ListViewItemData {
         public string word, definition;
     }
 }

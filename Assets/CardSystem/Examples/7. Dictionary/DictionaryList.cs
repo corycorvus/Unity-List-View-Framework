@@ -6,108 +6,89 @@ using Mono.Data.Sqlite;
 
 namespace CardSystem {
 	public class DictionaryList : ListViewController<DictionaryListItemData, DictionaryListItem> {
-	    public string dataFile;
-	    public GameObject[] models;
+	    public string databasePath = "/CardSystem/Examples/7. Dictionary/wordnet30.db";
+        public int batchSize = 10;
+	    public string defaultTemplate = "DictionaryItem";
 
-        readonly Dictionary<string, AdvancedList.ModelPool> _models = new Dictionary<string, AdvancedList.ModelPool>();
+	    private DictionaryListItemData[] lastBatch, nextBatch;
+	    IDbConnection dbconn;
+
         protected override void Setup() {
-			//base.Setup();
+			base.Setup();
 
-            string conn = "URI=file:" + Application.dataPath + "/CardSystem/Examples/7. Dictionary/wordnet30.db"; //Path to database.
-            IDbConnection dbconn;
+            string conn = "URI=file:" + Application.dataPath + databasePath;
+            
             dbconn = (IDbConnection)new SqliteConnection(conn);
             dbconn.Open(); //Open connection to the database.
+
+            data = GetBatch(0, batchSize);
+            nextBatch = GetBatch(batchSize, batchSize);
+        }
+
+	    void OnDestroy() {
+            dbconn.Close();
+            dbconn = null;
+        }
+
+	    DictionaryListItemData[] GetBatch(int offset, int size) {
+	        DictionaryListItemData[] batch = new DictionaryListItemData[size];
             IDbCommand dbcmd = dbconn.CreateCommand();
-            string sqlQuery = "SELECT lemma, definition FROM word as W JOIN sense as S on W.wordid=S.wordid JOIN synset as Y on S.synsetid=Y.synsetid ORDER BY W.wordid limit 100 OFFSET 0";
+            string sqlQuery = string.Format("SELECT lemma, definition FROM word as W JOIN sense as S on W.wordid=S.wordid JOIN synset as Y on S.synsetid=Y.synsetid ORDER BY W.wordid limit {0} OFFSET {1}", size, offset);
             dbcmd.CommandText = sqlQuery;
             IDataReader reader = dbcmd.ExecuteReader();
+	        int count = 0;
             while (reader.Read()) {
                 string lemma = reader.GetString(0);
                 string definition = reader.GetString(1);
 
-                Debug.Log("word= " + lemma + "  def =" + definition);
+                //Debug.Log("word= " + lemma + "  def =" + definition);
+                batch[count] = new DictionaryListItemData();
+                batch[count].template = defaultTemplate;
+                batch[count].word = lemma;
+
+                //Wrap definition
+                string[] words = definition.Split(' ');
+                int charCount = 0;
+                foreach (string word in words) {
+                    charCount += word.Length + 1;
+                    if (charCount > 40) { //Guesstimate
+                        batch[count].definition += "\n";
+                        charCount = 0;
+                    }
+                    batch[count].definition += word + " ";
+                }
+                count++;
             }
             reader.Close();
             reader = null;
             dbcmd.Dispose();
             dbcmd = null;
-            dbconn.Close();
-            dbconn = null;
-            return;
-
-        TextAsset text = Resources.Load<TextAsset>(dataFile);
-		    if (text) {
-		        JSONObject obj = new JSONObject(text.text);
-                data = new DictionaryListItemData[obj.Count];
-                for (int i = 0; i < data.Length; i++) {
-                    data[i] = new DictionaryListItemData();
-                    data[i].FromJSON(obj[i], this);
-                }
-		    } else data = new DictionaryListItemData[0];
-            
-        }
-
-        protected override void UpdateItems() {
-            int count = 0;
-            //UpdateRecursively(data, ref count);
-        }
-
-	    void UpdateRecursively(DictionaryListItemData[] data, ref int count) {
-	        foreach (DictionaryListItemData item in data) {
-	            if (count + dataOffset < 0) {
-	                ExtremeLeft(item);
-	            } else if (count + dataOffset > numItems) {
-	                ExtremeRight(item);
-	            } else {
-	                ListMiddle(item, count + dataOffset);
-	            }
-	            count++;
-	            if (item.children != null) {
-	                if (item.expanded) {
-	                    UpdateRecursively(item.children, ref count);
-	                } else {
-	                    RecycleChildren(item);
-	                }
-	            }
-	        }
+	        return batch;
 	    }
 
-	    void RecycleChildren(DictionaryListItemData data) {
-            foreach (DictionaryListItemData child in data.children) {
-                RecycleItem(child.template, child.item);
-                child.item = null;
-                if(child.children != null)
-                    RecycleChildren(child);
+        protected override void ComputeConditions() {
+            if (templates.Length > 0) {
+                //Use first template to get item size
+                _itemSize = GetObjectSize(templates[0]);
+            }
+            //Resize range to nearest multiple of item width
+            numItems = Mathf.RoundToInt(range / _itemSize.y); //Number of cards that will fit
+            range = numItems * _itemSize.y;
+
+            //Get initial conditions. This procedure is done every frame in case the collider bounds change at runtime
+            leftSide = transform.position + Vector3.up * range * 0.5f + Vector3.left * _itemSize.x * 0.5f;
+
+            dataOffset = (int)(scrollOffset / itemSize.y);
+            if (scrollOffset < 0)
+                dataOffset--;
+
+            if (-dataOffset > batchSize) {
+                data = GetBatch(batchSize, batchSize);
+                scrollOffset = 0;
             }
         }
-        
-        public GameObject GetModel(string name) {
-            if (!_models.ContainsKey(name)) {
-                Debug.LogWarning("Cannot get model, " + name + " doesn't exist");
-                return null;
-            }
-            GameObject model = null;
-            if (_models[name].pool.Count > 0) {
-                model = _models[name].pool[0];
-                _models[name].pool.RemoveAt(0);
-
-                model.gameObject.SetActive(true);
-            } else {
-                model = Instantiate(_models[name].prefab);
-                model.transform.parent = transform;
-            }
-	        return model;
-	    }
-
-        public class ModelPool {
-            public readonly GameObject prefab;
-            public readonly List<GameObject> pool = new List<GameObject>();
-
-            public ModelPool(GameObject prefab) {
-                if (prefab == null)
-                    Debug.LogError("Template prefab cannot be null");
-                this.prefab = prefab;
-            }
+        protected override void Positioning(Transform t, int offset) {
+            t.position = leftSide + (offset * _itemSize.y + scrollOffset) * Vector3.down;
         }
     }
 }

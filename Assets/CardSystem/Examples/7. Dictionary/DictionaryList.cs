@@ -1,16 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using Mono.Data.Sqlite;
 
 namespace CardSystem {
 	public class DictionaryList : ListViewController<DictionaryListItemData, DictionaryListItem> {
 	    public string dataFile;
 	    public GameObject[] models;
 
-        readonly Dictionary<string, ModelPool> _models = new Dictionary<string, ModelPool>();
+        readonly Dictionary<string, AdvancedList.ModelPool> _models = new Dictionary<string, AdvancedList.ModelPool>();
         protected override void Setup() {
-			base.Setup();
-		    TextAsset text = Resources.Load<TextAsset>(dataFile);
+			//base.Setup();
+
+            string conn = "URI=file:" + Application.dataPath + "/CardSystem/Examples/7. Dictionary/wordnet30.db"; //Path to database.
+            IDbConnection dbconn;
+            dbconn = (IDbConnection)new SqliteConnection(conn);
+            dbconn.Open(); //Open connection to the database.
+            IDbCommand dbcmd = dbconn.CreateCommand();
+            string sqlQuery = "SELECT lemma, definition FROM word as W JOIN sense as S on W.wordid=S.wordid JOIN synset as Y on S.synsetid=Y.synsetid ORDER BY W.wordid limit 100 OFFSET 0";
+            dbcmd.CommandText = sqlQuery;
+            IDataReader reader = dbcmd.ExecuteReader();
+            while (reader.Read()) {
+                string lemma = reader.GetString(0);
+                string definition = reader.GetString(1);
+
+                Debug.Log("word= " + lemma + "  def =" + definition);
+            }
+            reader.Close();
+            reader = null;
+            dbcmd.Dispose();
+            dbcmd = null;
+            dbconn.Close();
+            dbconn = null;
+            return;
+
+        TextAsset text = Resources.Load<TextAsset>(dataFile);
 		    if (text) {
 		        JSONObject obj = new JSONObject(text.text);
                 data = new DictionaryListItemData[obj.Count];
@@ -19,20 +44,12 @@ namespace CardSystem {
                     data[i].FromJSON(obj[i], this);
                 }
 		    } else data = new DictionaryListItemData[0];
-
-            if (models.Length < 1) {
-                Debug.LogError("No models!");
-            }
-            foreach (GameObject model in models) {
-                if (_models.ContainsKey(model.name))
-                    Debug.LogError("Two templates cannot have the same name");
-                _models[model.name] = new ModelPool(model);
-            }
+            
         }
 
         protected override void UpdateItems() {
             int count = 0;
-            UpdateRecursively(data, ref count);
+            //UpdateRecursively(data, ref count);
         }
 
 	    void UpdateRecursively(DictionaryListItemData[] data, ref int count) {

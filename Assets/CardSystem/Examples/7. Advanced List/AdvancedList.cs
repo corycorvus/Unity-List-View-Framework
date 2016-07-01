@@ -120,7 +120,7 @@ namespace CardSystem {
 
         protected override void RecycleItem(string template, MonoBehaviour item) {
             base.RecycleItem(template, item);
-            try {
+            try {       //Try the cast. If it fails we just have a category
                 AdvancedListItemChild aItem = (AdvancedListItemChild) item;
                 if (aItem) {
                     _models[aItem.data.model].pool.Add(aItem.model);

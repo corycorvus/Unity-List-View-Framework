@@ -23,8 +23,17 @@ public class DictionaryInputHandler : ListViewScroller {
 	    screenPoint.z = listDepth;
         Scroll(Camera.main.ScreenToWorldPoint(screenPoint));
 	}
+    protected override void StartScrolling(Vector3 position) {
+        base.StartScrolling(position);
+        ((DictionaryList)listView).OnStartScrolling();
+    }
     protected override void Scroll(Vector3 position) {
-        if (scrolling)
+        if (scrolling) {
             listView.scrollOffset = startOffset + startPosition.y - position.y;
+        }
+    }
+    protected override void StopScrolling() {
+        base.StopScrolling();
+        ((DictionaryList)listView).OnStopScrolling();
     }
 }

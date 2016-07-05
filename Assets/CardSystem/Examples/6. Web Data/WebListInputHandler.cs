@@ -3,7 +3,6 @@ using System.Collections;
 using CardSystem;
 
 public class WebListInputHandler : ListViewScroller {
-    public float scrollThreshold = 0.2f;
     public float scrollWheelCoeff = 1;
     private float listDepth;
     protected override void HandleInput() {

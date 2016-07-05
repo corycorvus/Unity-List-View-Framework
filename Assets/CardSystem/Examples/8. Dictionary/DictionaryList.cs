@@ -8,11 +8,15 @@ using Mono.Data.Sqlite;
 
 namespace CardSystem {
 	public class DictionaryList : ListViewController<DictionaryListItemData, DictionaryListItem> {
-	    public string databasePath = "/CardSystem/Examples/7. Dictionary/wordnet30.db";
+	    public string databasePath = "/CardSystem/Examples/8. Dictionary/wordnet30.db";
         public int batchSize = 15;
         public float scrollDamping = 15f;
         public string defaultTemplate = "DictionaryItem";
 	    public GameObject loadingIndicator;
+
+        public int maxWordCharacters = 30;          //Wrap word after 30 characters
+        public int definitionCharacterWrap = 40;    //Wrap definition after 40 characters
+	    public int maxDefinitionLines = 4;          //Max 4 lines per definition
         
         delegate void WordsResult(DictionaryListItemData[] words);
 	    private volatile bool dbLock;
@@ -34,6 +38,10 @@ namespace CardSystem {
             
             dbconn = (IDbConnection)new SqliteConnection(conn);
             dbconn.Open(); //Open connection to the database.
+
+            if (maxWordCharacters < 4) {
+                Debug.LogError("Max word length must be > 3");
+            }
 
             data = null;
             //Start off with some data
@@ -71,15 +79,24 @@ namespace CardSystem {
 	                    words[count] = new DictionaryListItemData();
 
 	                    words[count].template = defaultTemplate;
-	                    words[count].word = lemma;
+                        //truncate word if necessary
+                        if (lemma.Length > maxWordCharacters) {
+                            lemma = lemma.Substring(0, maxWordCharacters - 3) + "...";
+                        }
+                        words[count].word = lemma;
 
-	                    //Wrap definition
-	                    string[] wrds = definition.Split(' ');
+                        //Wrap definition
+                        string[] wrds = definition.Split(' ');
 	                    int charCount = 0;
+	                    int lineCount = 0;
 	                    foreach (string wrd in wrds) {
 	                        charCount += wrd.Length + 1;
-	                        if (charCount > 40) { //Guesstimate
-	                            words[count].definition += "\n";
+	                        if (charCount > definitionCharacterWrap) { //Guesstimate
+	                            if (++lineCount >= maxDefinitionLines) {
+                                    words[count].definition += "...";
+	                                break;
+	                            }
+                                words[count].definition += "\n";
 	                            charCount = 0;
 	                        }
 	                        words[count].definition += wrd + " ";

@@ -4,6 +4,8 @@ using System.Collections;
 
 namespace CardSystem {
 	public class WebList : ListViewController<JSONItemData, JSONItem> {
+        //Ideas for a better/different example web service are welcome
+        //Note: the github API has a rate limit. After a couple of tries, you won't see any results :(
 	    public string URLFormatString = "https://api.github.com/gists/public?page={0}&per_page={1}";
 	    public string defaultTemplate = "JSONItem";
 	    public int batchSize = 15;
@@ -36,7 +38,6 @@ namespace CardSystem {
 	            items[i] = new JSONItemData {template = defaultTemplate};
 	            response[i].GetField(ref items[i].text, "description");
 	        }
-	        Debug.Log(response);
 	        result(items);
 	        webLock = false;
 	        loading = false;

@@ -1,16 +1,16 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using Mono.Data.Sqlite;
 
-namespace CardSystem {
+//Borrows from http://answers.unity3d.com/questions/743400/database-sqlite-setup-for-unity.html
+namespace ListView {
 	public class DictionaryList : ListViewController<DictionaryListItemData, DictionaryListItem> {
 	    public string databasePath = "/CardSystem/Examples/8. Dictionary/wordnet30.db";
         public int batchSize = 15;
         public float scrollDamping = 15f;
+	    public float maxMomentum = 200f;
         public string defaultTemplate = "DictionaryItem";
 	    public GameObject loadingIndicator;
 
@@ -37,7 +37,7 @@ namespace CardSystem {
 
             string conn = "URI=file:" + Application.dataPath + databasePath;
             
-            dbconn = (IDbConnection)new SqliteConnection(conn);
+            dbconn = new SqliteConnection(conn);
             dbconn.Open(); //Open connection to the database.
 
             if (maxWordCharacters < 4) {
@@ -46,12 +46,14 @@ namespace CardSystem {
 
             try {
                 IDbCommand dbcmd = dbconn.CreateCommand();
-                string sqlQuery = string.Format("SELECT COUNT(lemma) FROM word as W JOIN sense as S on W.wordid=S.wordid JOIN synset as Y on S.synsetid=Y.synsetid");
+                string sqlQuery = "SELECT COUNT(lemma) FROM word as W JOIN sense as S on W.wordid=S.wordid JOIN synset as Y on S.synsetid=Y.synsetid";
                 dbcmd.CommandText = sqlQuery;
                 IDataReader reader = dbcmd.ExecuteReader();
                 while (reader.Read()) {
                     dataLength = reader.GetInt32(0);
                 }
+                reader.Close();
+                dbcmd.Dispose();
             } catch {
                 Debug.LogError("DB error, couldn't get total data length");
             }
@@ -89,10 +91,9 @@ namespace CardSystem {
 	                while (reader.Read()) {
 	                    string lemma = reader.GetString(0);
 	                    string definition = reader.GetString(1);
-	                    words[count] = new DictionaryListItemData();
+	                    words[count] = new DictionaryListItemData {template = defaultTemplate};
 
-	                    words[count].template = defaultTemplate;
-                        //truncate word if necessary
+	                    //truncate word if necessary
                         if (lemma.Length > maxWordCharacters) {
                             lemma = lemma.Substring(0, maxWordCharacters - 3) + "...";
                         }
@@ -120,9 +121,7 @@ namespace CardSystem {
 	                    Debug.LogWarning("reached end");
 	                }
 	                reader.Close();
-	                reader = null;
 	                dbcmd.Dispose();
-	                dbcmd = null;
 	                result(words);
 	            } catch (Exception e) {
 	                Debug.LogError("Exception reading from DB: " + e.Message);
@@ -166,8 +165,7 @@ namespace CardSystem {
 	                    batchOffset = currBatch - 1;
 	                });
 	            }
-	        }
-	        if (batchOffset > 0 && -dataOffset < (batchOffset + 1) * batchSize) {
+	        } else if (batchOffset > 0 && -dataOffset < (batchOffset + 1) * batchSize) {
 	            if (currBatch == batchOffset) { //Just one batch, fetch only the next one
                     GetWords((batchOffset - 1) * batchSize, batchSize, words => {
 	                    Array.Copy(data, 0, data, batchSize, batchSize * 2);
@@ -200,7 +198,11 @@ namespace CardSystem {
 	        if (scrolling) {
 	            scrollDelta = (scrollOffset - lastScrollOffset) / Time.deltaTime;
 	            lastScrollOffset = scrollOffset;
-	        } else {
+	            if (scrollDelta > maxMomentum)
+	                scrollDelta = maxMomentum;
+                if (scrollDelta < -maxMomentum)
+                    scrollDelta = -maxMomentum;
+            } else {
 	            scrollOffset += scrollDelta * Time.deltaTime;
 	            if (scrollDelta > 0) {
 	                scrollDelta -= scrollDamping * Time.deltaTime;

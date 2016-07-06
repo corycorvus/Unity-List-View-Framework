@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CardSystem;
+using ListView;
 
 public class AdvancedListInputHandler : ListViewScroller {
     public float scrollThreshold = 0.2f;

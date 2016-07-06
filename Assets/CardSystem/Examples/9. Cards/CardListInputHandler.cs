@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CardSystem;
+using ListView;
 
 public class CardListInputHandler : ListViewScroller {
     public float scrollWheelCoeff = 1;

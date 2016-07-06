@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace CardSystem {
+namespace ListView {
 	public class NestedJSONList : ListViewController<NestedJSONItemData, NestedJSONItem> {
 	    public string dataFile;
 	    public string defaultTemplate;

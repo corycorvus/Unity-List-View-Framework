@@ -6,15 +6,14 @@ using System.Linq;
 using System.Reflection;
 using Random = System.Random;
 
-namespace CardSystem {
+namespace ListView {
 	public class CardGameList : ListViewController<CardData, Card> {
 	    public string defaultTemplate = "Card";
 	    public float interpolate = 15f;
 	    public float recycleDuration = 0.3f;
 	    public int dealMax = 5;
 	    public Transform deck;
-
-	    private float scrollReturn = float.MaxValue;
+        
 	    private Vector3 startPos;
 
 
@@ -59,16 +58,6 @@ namespace CardSystem {
 
 	    void OnDrawGizmos() {
 	        Gizmos.DrawWireCube(transform.position + Vector3.left * (itemSize.x * dealMax - range) * 0.5f, new Vector3(range, itemSize.y, itemSize.z));
-	    }
-
-	    public void OnStopScrolling() {
-	        if (scrollOffset > itemSize.x) {
-	            scrollOffset = itemSize.x * 0.5f;
-	        }
-	        if (scrollReturn < float.MaxValue) {
-	            scrollOffset = scrollReturn;
-	            scrollReturn = float.MaxValue;
-	        }
 	    }
 
         protected override void UpdateItems() {
@@ -175,9 +164,7 @@ namespace CardSystem {
 	    }
 
 	    public void AddCardToDeck(CardData cardData) {
-            List<CardData> newData = new List<CardData>(data);
-            newData.Add(cardData);
-            data = newData.ToArray();
+	        data = new List<CardData>(data) {cardData}.ToArray();
 	        cardData.item.transform.parent = transform;
             RecycleCard(cardData);
         }

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CardSystem {
+namespace ListView {
     public class ListViewController : ListViewController<ListViewItemInspectorData, ListViewItem> {}
 
     public abstract class ListViewControllerBase : MonoBehaviour {

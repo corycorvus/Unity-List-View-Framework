@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace CardSystem {
+namespace ListView {
 	public class WebList : ListViewController<JSONItemData, JSONItem> {
         //Ideas for a better/different example web service are welcome
         //Note: the github API has a rate limit. After a couple of tries, you won't see any results :(
@@ -10,7 +10,7 @@ namespace CardSystem {
 	    public string defaultTemplate = "JSONItem";
 	    public int batchSize = 15;
 
-        delegate void WebResult(JSONItemData[] data);
+        private delegate void WebResult(JSONItemData[] data);
 
 	    private int batchOffset;
 	    private bool webLock;
@@ -77,8 +77,7 @@ namespace CardSystem {
                         batchOffset = currBatch - 1;
                     }));
                 }
-            }
-            if (batchOffset > 0 && -dataOffset < (batchOffset + 1) * batchSize) {
+            } else if (batchOffset > 0 && -dataOffset < (batchOffset + 1) * batchSize) {
                 if (currBatch == batchOffset) { //Just one batch, fetch only the next one
                     StartCoroutine(GetBatch((batchOffset - 1) * batchSize, batchSize, words => {
                         Array.Copy(data, 0, data, batchSize, batchSize * 2);

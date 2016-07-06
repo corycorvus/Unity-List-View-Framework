@@ -6,13 +6,15 @@ using System.Linq;
 using System.Reflection;
 using Random = System.Random;
 
-namespace CardSystem {
+namespace ListView {
 	public class CardGameHand : ListViewController<CardData, Card> {
         public float radius = 0.25f;
         public float interpolate = 15f;
 	    public float stackOffset = 0.01f;
 	    public int handSize = 5;
+	    public float indicatorTime = 0.5f;
         public CardGameList controller;
+	    public Renderer indicator;
 
 	    private float cardDegrees, cardsOffset;
 
@@ -34,8 +36,8 @@ namespace CardSystem {
 	    }
 
 	    protected override void UpdateItems() {
-            DebugDrawCircle(radius, 24, transform.position, transform.rotation);
-            DebugDrawCircle(radius + itemSize.z, 24, transform.position, transform.rotation);
+            DebugDrawCircle(radius - itemSize.z * 0.5f, 24, transform.position, transform.rotation);
+            DebugDrawCircle(radius + itemSize.z * 0.5f, 24, transform.position, transform.rotation);
             for (int i = 0; i < data.Length; i++) {
                 Positioning(data[i].item.transform, i);
             }
@@ -46,7 +48,7 @@ namespace CardSystem {
             t.localPosition = Vector3.Lerp(t.localPosition, 
                 sliceRotation * (Vector3.left * radius) 
                 + Vector3.up * stackOffset * offset, interpolate * Time.deltaTime);
-            t.localRotation = Quaternion.Lerp(t.localRotation, sliceRotation * Quaternion.AngleAxis(90, Vector3.up), interpolate * Time.deltaTime);
+            t.localRotation = Quaternion.Lerp(t.localRotation, sliceRotation * Quaternion.AngleAxis(90, Vector3.down), interpolate * Time.deltaTime);
         }
 
         public static void DebugDrawCircle(float radius, int slices, Vector3 center) {
@@ -69,8 +71,8 @@ namespace CardSystem {
 	            controller.RemoveCardFromDeck(item.data);
 	            item.transform.parent = transform;
 	        } else {
-                //TODO: Message to user
-	            Debug.Log("Can't draw card, hand is full!");
+                Indicate();
+                Debug.Log("Can't draw card, hand is full!");
 	        }
 	    }
 
@@ -81,9 +83,19 @@ namespace CardSystem {
                 data = newData.ToArray();
                 controller.AddCardToDeck(item.data);
             } else {
-                //TODO: Message to user
+                Indicate();
                 Debug.Log("Something went wrong... This card is not in your hand");
             }
+        }
+
+	    void Indicate() {
+	        StartCoroutine(DoIndicate());
+	    }
+
+	    IEnumerator DoIndicate() {
+	        indicator.enabled = true;
+	        yield return new WaitForSeconds(indicatorTime);
+            indicator.enabled = false;
         }
 	}
 }

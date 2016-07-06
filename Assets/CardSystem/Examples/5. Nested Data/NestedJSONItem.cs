@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CardSystem;
+using ListView;
 
 public class NestedJSONItem : ListViewItem<NestedJSONItemData> {
     public TextMesh label;

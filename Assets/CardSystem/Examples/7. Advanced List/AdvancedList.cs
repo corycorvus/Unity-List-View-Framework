@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CardSystem {
+namespace ListView {
 	public class AdvancedList : ListViewController<AdvancedListItemData, AdvancedListItem> {
 	    public string dataFile;
 	    public GameObject[] models;

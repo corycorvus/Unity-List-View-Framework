@@ -27,3 +27,5 @@ ExportedObj/
 sysinfo.txt
 
 ProjectSettings/ProjectVersion.txt
+/Assets/BuildReport
+/Assets/BuildReport.meta

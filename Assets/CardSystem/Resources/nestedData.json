@@ -3,16 +3,16 @@
         "text": "one",
         "children": [
             {
-                "text": "child 1",
+                "text": ".child 1",
 				"children": [
 					{
-						"text": ".child1"
+						"text": "..child1"
 					},
 					{
-						"text": ".child2"
+						"text": "..child2"
 					},
 					{
-						"text": ".child3"
+						"text": "..child3"
 					}
 				]
             }

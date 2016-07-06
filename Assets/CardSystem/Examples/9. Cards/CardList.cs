@@ -1,20 +1,21 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Random = System.Random;
 
-namespace CardSystem {
+//Images sourced from http://web.stanford.edu/~jlewis8/cs148/pokerscene/
+namespace ListView {
 	public class CardList : ListViewController<CardData, Card> {
 	    public string defaultTemplate = "Card";
 	    public float interpolate = 15f;
 	    public float recycleDuration = 0.3f;
-	    public Transform leftDeck, rightDeck;
+        public bool autoScroll;
+	    public float scrollSpeed = 1;
+        public Transform leftDeck, rightDeck;
 
 	    private float scrollReturn = float.MaxValue;
-	    private float itemHeight;
+	    private float lastScrollOffset;
 
         protected override void Setup() {
 			base.Setup();
@@ -64,6 +65,11 @@ namespace CardSystem {
 	    }
 
         protected override void UpdateItems() {
+            if (autoScroll) {
+                scrollOffset -= scrollSpeed * Time.deltaTime;
+                if(-scrollOffset > (data.Length - numItems) * itemSize.x || scrollOffset >= 0)
+                    scrollSpeed *= -1;
+            }
             for (int i = 0; i < data.Length; i++) {
                 if (i + dataOffset < 0) {
                     ExtremeLeft(data[i]);
@@ -73,6 +79,7 @@ namespace CardSystem {
                     ListMiddle(data[i], i);
                 }
             }
+            lastScrollOffset = scrollOffset;
         }
 
         protected override void ExtremeLeft(CardData data) {
@@ -84,7 +91,7 @@ namespace CardSystem {
         protected override void ListMiddle(CardData data, int offset) {
             if (data.item == null) {
                 data.item = GetItem(data);
-                if (offset + dataOffset > numItems / 2) {
+                if (scrollOffset - lastScrollOffset < 0) {
                     data.item.transform.position = rightDeck.transform.position;
                     data.item.transform.rotation = rightDeck.transform.rotation;
                 } else {

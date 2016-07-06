@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CardSystem;
+using ListView;
 
-namespace CardSystem {
+namespace ListView {
     public class AdvancedListItem : ListViewItem<AdvancedListItemData> {
         public TextMesh title;
 

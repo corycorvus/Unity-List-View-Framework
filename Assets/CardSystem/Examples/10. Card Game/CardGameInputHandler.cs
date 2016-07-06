@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using CardSystem;
+using ListView;
 
 public class CardGameInputHandler : ListViewInputHandler {
     public CardGameHand hand;

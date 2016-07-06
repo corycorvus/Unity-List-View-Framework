@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CardSystem {
+namespace ListView {
 	public class ListViewItem : ListViewItem<ListViewItemInspectorData> {}
 
     [RequireComponent(typeof (Collider))]

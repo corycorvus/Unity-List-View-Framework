@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace CardSystem {
+namespace ListView {
 	public abstract class ListViewInputHandler : MonoBehaviour {
 		
 		public ListViewControllerBase listView;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-namespace CardSystem {
+//Uses JSONObject http://u3d.as/1Rh
+namespace ListView {
 	public class JSONList : ListViewController<JSONItemData, JSONItem> {
 	    public string dataFile;
 	    public string defaultTemplate;

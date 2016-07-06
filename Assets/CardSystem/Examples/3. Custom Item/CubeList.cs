@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace CardSystem {
+namespace ListView {
 	public class CubeList : ListViewController<CubeItemData, CubeItem> {
 		protected override void Setup() {
 			base.Setup();

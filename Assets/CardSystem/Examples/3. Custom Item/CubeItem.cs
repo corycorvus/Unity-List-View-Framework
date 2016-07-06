@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-namespace CardSystem {
+namespace ListView {
 	public class CubeItem : ListViewItem<CubeItemData> {
 		public TextMesh label;
 

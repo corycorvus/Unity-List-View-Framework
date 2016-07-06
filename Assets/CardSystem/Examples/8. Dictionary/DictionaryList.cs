@@ -22,6 +22,7 @@ namespace CardSystem {
 	    private volatile bool dbLock;
 
         private DictionaryListItemData[] cleanup;
+	    private int dataLength;         //Total number of items in the data set
 	    private int batchOffset;        //Number of batches we are offset
 	    private bool scrolling;
 	    private bool loading;
@@ -41,6 +42,18 @@ namespace CardSystem {
 
             if (maxWordCharacters < 4) {
                 Debug.LogError("Max word length must be > 3");
+            }
+
+            try {
+                IDbCommand dbcmd = dbconn.CreateCommand();
+                string sqlQuery = string.Format("SELECT COUNT(lemma) FROM word as W JOIN sense as S on W.wordid=S.wordid JOIN synset as Y on S.synsetid=Y.synsetid");
+                dbcmd.CommandText = sqlQuery;
+                IDataReader reader = dbcmd.ExecuteReader();
+                while (reader.Read()) {
+                    dataLength = reader.GetInt32(0);
+                }
+            } catch {
+                Debug.LogError("DB error, couldn't get total data length");
             }
 
             data = null;
@@ -201,7 +214,10 @@ namespace CardSystem {
 	                }
 	            }
 	        }
-	    }
+	        if (dataOffset >= dataLength) {
+	            scrollReturn = scrollOffset;
+	        }
+        }
         
 	    public void OnStartScrolling() {
 	        scrolling = true;

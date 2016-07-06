@@ -125,6 +125,7 @@ namespace CardSystem {
         }
 
         GameObject AddQuad(GameObject prefab) {
+            //NOTE: If we were really concerned about performance, we could pool the quads
             GameObject quad = Instantiate(prefab);
             quad.transform.parent = transform;
             quad.transform.localPosition = Vector3.up * yOffset;

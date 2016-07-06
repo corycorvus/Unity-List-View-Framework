@@ -7,14 +7,16 @@ using System.Reflection;
 using Random = System.Random;
 
 namespace CardSystem {
-	public class CardList : ListViewController<CardData, Card> {
+	public class CardGameList : ListViewController<CardData, Card> {
 	    public string defaultTemplate = "Card";
 	    public float interpolate = 15f;
 	    public float recycleDuration = 0.3f;
-	    public Transform leftDeck, rightDeck;
+	    public int dealMax = 5;
+	    public Transform deck;
 
 	    private float scrollReturn = float.MaxValue;
-	    private float itemHeight;
+	    private Vector3 startPos;
+
 
         protected override void Setup() {
 			base.Setup();
@@ -45,16 +47,22 @@ namespace CardSystem {
                     dataList.Add(card);
                 }
             }
-            Random rnd = new Random();
-            data = dataList.OrderBy(x => rnd.Next()).ToArray();
+            Shuffle(dataList);
+
+            range = 0;
         }
 
+	    private void Shuffle(List<CardData> dataList) {
+	        Random rnd = new Random();
+	        data = dataList.OrderBy(x => rnd.Next()).ToArray();
+	    }
+
 	    void OnDrawGizmos() {
-	        Gizmos.DrawWireCube(transform.position, new Vector3(range, itemSize.y, itemSize.z));
+	        Gizmos.DrawWireCube(transform.position + Vector3.left * (itemSize.x * dealMax - range) * 0.5f, new Vector3(range, itemSize.y, itemSize.z));
 	    }
 
 	    public void OnStopScrolling() {
-	        if (scrollOffset > itemSize.x) {            //Let us over-scroll one whole card
+	        if (scrollOffset > itemSize.x) {
 	            scrollOffset = itemSize.x * 0.5f;
 	        }
 	        if (scrollReturn < float.MaxValue) {
@@ -64,10 +72,11 @@ namespace CardSystem {
 	    }
 
         protected override void UpdateItems() {
+            startPos = transform.position + Vector3.left * itemSize.x * dealMax * 0.5f;
             for (int i = 0; i < data.Length; i++) {
                 if (i + dataOffset < 0) {
                     ExtremeLeft(data[i]);
-                } else if (i + dataOffset > numItems - 1) {     //End the list one item early
+                } else if (i + dataOffset > numItems - 1) {
                     ExtremeRight(data[i]);
                 } else {
                     ListMiddle(data[i], i);
@@ -76,23 +85,42 @@ namespace CardSystem {
         }
 
         protected override void ExtremeLeft(CardData data) {
-            RecycleItemAnimated(data, leftDeck);
+            RecycleItemAnimated(data, deck);
         }
         protected override void ExtremeRight(CardData data) {
-            RecycleItemAnimated(data, rightDeck);
+            RecycleItemAnimated(data, deck);
         }
         protected override void ListMiddle(CardData data, int offset) {
             if (data.item == null) {
                 data.item = GetItem(data);
-                if (offset + dataOffset > numItems / 2) {
-                    data.item.transform.position = rightDeck.transform.position;
-                    data.item.transform.rotation = rightDeck.transform.rotation;
-                } else {
-                    data.item.transform.position = leftDeck.transform.position;
-                    data.item.transform.rotation = leftDeck.transform.rotation;
-                }
+                data.item.transform.position = deck.transform.position;
+                data.item.transform.rotation = deck.transform.rotation;
             }
             Positioning(data.item.transform, offset);
+        }
+
+        protected override Card GetItem(CardData data) {
+            if (data == null) {
+                Debug.LogWarning("Tried to get item with null data");
+                return null;
+            }
+            if (!_templates.ContainsKey(data.template)) {
+                Debug.LogWarning("Cannot get item, template " + data.template + " doesn't exist");
+                return null;
+            }
+            Card item = null;
+            if (_templates[data.template].pool.Count > 0) {
+                item = (Card)_templates[data.template].pool[0];
+                _templates[data.template].pool.RemoveAt(0);
+
+                item.gameObject.SetActive(true);
+                item.Setup(data);
+            } else {
+                item = Instantiate(_templates[data.template].prefab).GetComponent<Card>();
+                item.transform.parent = transform;
+                item.Setup(data);
+            }
+            return item;
         }
 
 	    void RecycleItemAnimated(CardData data, Transform destination) {
@@ -116,9 +144,54 @@ namespace CardSystem {
             RecycleItem(template, card);
         }
         protected override void Positioning(Transform t, int offset) {
-            t.position = Vector3.Lerp(t.position, leftSide + (offset * _itemSize.x + scrollOffset) * Vector3.right, interpolate * Time.deltaTime);
+            t.position = Vector3.Lerp(t.position, startPos + (offset * _itemSize.x + scrollOffset) * Vector3.right, interpolate * Time.deltaTime);
             t.rotation = Quaternion.Lerp(t.rotation, Quaternion.identity, interpolate * Time.deltaTime);
         }
 
-    }
+	    public void RecycleCard(CardData data) {
+            RecycleItemAnimated(data, deck);
+	    }
+
+	    public CardData DrawCard() {
+	        if (data.Length == 0) {
+                Debug.Log("Out of Cards");
+	            return null;
+	        }
+	        List<CardData> newData = new List<CardData>(data);
+	        CardData result = newData[newData.Count - 1];
+            newData.RemoveAt(newData.Count - 1);
+	        if (result.item == null) {
+	            GetItem(result);
+	        }
+            data = newData.ToArray();
+            return result;
+	    }
+	    public void RemoveCardFromDeck(CardData cardData) {
+            List<CardData> newData = new List<CardData>(data);
+            newData.Remove(cardData);
+            data = newData.ToArray();
+	        if (range > 0)
+	            range -= itemSize.x;
+	    }
+
+	    public void AddCardToDeck(CardData cardData) {
+            List<CardData> newData = new List<CardData>(data);
+            newData.Add(cardData);
+            data = newData.ToArray();
+	        cardData.item.transform.parent = transform;
+            RecycleCard(cardData);
+        }
+
+	    public void Deal() {
+	        range += itemSize.x;
+	        if (range >= itemSize.x * (dealMax + 1)) {
+	            scrollOffset -= itemSize.x * dealMax;
+	            range = 0;
+	        }
+            if (-scrollOffset >= (data.Length - dealMax) * itemSize.x) { //reshuffle
+                Shuffle(new List<CardData>(data));
+                scrollOffset = itemSize.x * 0.5f;
+            }
+        }
+	}
 }

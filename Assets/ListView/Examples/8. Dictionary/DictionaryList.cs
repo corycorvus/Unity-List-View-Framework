@@ -1,13 +1,16 @@
 ﻿using System;
 using UnityEngine;
 using System.Data;
+using System.IO;
 using System.Threading;
 using Mono.Data.Sqlite;
 
 //Borrows from http://answers.unity3d.com/questions/743400/database-sqlite-setup-for-unity.html
+//Dictionary from https://wordnet.princeton.edu/
 namespace ListView {
 	public class DictionaryList : ListViewController<DictionaryListItemData, DictionaryListItem> {
-	    public string databasePath = "/CardSystem/Examples/8. Dictionary/wordnet30.db";
+        public const string editorDatabasePath = "ListView/Examples/8. Dictionary/wordnet30.db";
+	    public const string databasePath = "wordnet30.db";
         public int batchSize = 15;
         public float scrollDamping = 15f;
 	    public float maxMomentum = 200f;
@@ -35,8 +38,12 @@ namespace ListView {
         protected override void Setup() {
 			base.Setup();
 
-            string conn = "URI=file:" + Application.dataPath + databasePath;
-            
+#if UNITY_EDITOR
+            string conn = "URI=file:" + Path.Combine(Application.dataPath, editorDatabasePath);
+#else
+            string conn = "URI=file:" + Path.Combine(Application.dataPath, databasePath);
+#endif
+
             dbconn = new SqliteConnection(conn);
             dbconn.Open(); //Open connection to the database.
 

@@ -65,8 +65,7 @@ namespace ListView {
 
 	    public void DrawCard(Card item) {
 	        if (data.Length < handSize) {
-                List<CardData> newData = new List<CardData>(data);
-                newData.Add(item.data);
+	            List<CardData> newData = new List<CardData>(data) {item.data};
 	            data = newData.ToArray();
 	            controller.RemoveCardFromDeck(item.data);
 	            item.transform.parent = transform;
@@ -78,7 +77,7 @@ namespace ListView {
 
 	    public void ReturnCard(Card item) {
             if (data.Contains(item.data)) { 
-                List<CardData> newData = new List<CardData>(data);
+                var newData = new List<CardData>(data);
                 newData.Remove(item.data);
                 data = newData.ToArray();
                 controller.AddCardToDeck(item.data);

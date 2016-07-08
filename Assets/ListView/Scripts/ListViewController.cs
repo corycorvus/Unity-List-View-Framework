@@ -9,11 +9,14 @@ namespace ListView
 
     public abstract class ListViewControllerBase : MonoBehaviour
     {
-
         //Public variables
+        [Tooltip("Distance (in meters) we have scrolled from initial position")]
         public float scrollOffset;
+        [Tooltip("Padding (in meters) between items")]
         public float padding = 0.01f;
+        [Tooltip("Width (in meters) of visible region")]
         public float range = 1;
+        [Tooltip("Item temlate prefabs (at least one is required)")]
         public GameObject[] templates;
 
         //Protected variables
@@ -128,6 +131,7 @@ namespace ListView
         where DataType : ListViewItemData
         where ItemType : ListViewItem<DataType>
     {
+        [Tooltip("Source Data")]
         public DataType[] data;
 
         protected override void UpdateItems()

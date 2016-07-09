@@ -124,6 +124,7 @@ namespace ListView
                 m_Templates[data.template].pool.RemoveAt(0);
 
                 item.gameObject.SetActive(true);
+                item.GetComponent<BoxCollider>().enabled = true;
                 item.Setup(data);
             } else
             {
@@ -140,6 +141,7 @@ namespace ListView
                 return;
             MonoBehaviour item = data.item;
             data.item = null;
+            item.GetComponent<BoxCollider>().enabled = false;       //Disable collider so we can't click the card during the animation
             StartCoroutine(RecycleAnimation(item, data.template, destination, recycleDuration));
         }
 

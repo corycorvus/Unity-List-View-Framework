@@ -76,6 +76,8 @@ namespace ListView
         {
             if (data.Length < handSize)
             {
+                if(item.data == null)
+                    Debug.Log("aaah!");
                 List<CardData> newData = new List<CardData>(data) {item.data};
                 data = newData.ToArray();
                 controller.RemoveCardFromDeck(item.data);

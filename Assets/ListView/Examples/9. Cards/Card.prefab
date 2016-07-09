@@ -285,7 +285,7 @@ MonoBehaviour:
   topNum: {fileID: 102000013169189846}
   botNum: {fileID: 102000010715190424}
   centerScale: 3
-  diamond: {fileID: 1000012067369654, guid: 0c100134f42ccc74abf25e20fa838fcc, type: 2}
-  heart: {fileID: 1000013015378978, guid: 1ed4c43a441bddf489af9705fb40fde6, type: 2}
-  spade: {fileID: 1000010369621484, guid: 7dbe1d718b3913f48b512a72e6becddf, type: 2}
-  club: {fileID: 1000011108260960, guid: 2b7e2d1f23728c3458f0a6ce38e75ef1, type: 2}
+  m_Diamond: {fileID: 1000012067369654, guid: 0c100134f42ccc74abf25e20fa838fcc, type: 2}
+  m_Heart: {fileID: 1000013015378978, guid: 1ed4c43a441bddf489af9705fb40fde6, type: 2}
+  m_Spade: {fileID: 1000010369621484, guid: 7dbe1d718b3913f48b512a72e6becddf, type: 2}
+  m_Club: {fileID: 1000011108260960, guid: 2b7e2d1f23728c3458f0a6ce38e75ef1, type: 2}

@@ -11,8 +11,9 @@ namespace ListView
         public int range = 5;
 
         public string[] data;
-
-        TextMesh[] m_Items;
+		public GUISkin skin;
+							
+        TextMesh[] m_Items;	
 
         void Start()
         {
@@ -42,7 +43,7 @@ namespace ListView
         }
 
         void OnGUI()
-        {
+        {							
             GUILayout.BeginArea(new Rect(10, 10, 300, 300));
             GUILayout.Label("This is an overly simplistic m_List view. Click the buttons below to scroll, or modify Data Offset in the inspector");
             if (GUILayout.Button("Scroll Next"))

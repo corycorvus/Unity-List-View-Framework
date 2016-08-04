@@ -10,6 +10,7 @@ The code is set up to be customization, but not "intelligent" or comprehensive. 
 
 #Usage#
 List view implementations will require at a minimum:
+
 1. A GameObject with a ListViewController (or extension) component
 2. At least one template prefab with a ListViewItem (or extension) component
 3. A data source composed of ListViewData objects

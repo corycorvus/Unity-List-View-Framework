@@ -126,7 +126,6 @@ namespace ListView
         }
     }
 
-    //I'm actually kind of shocked I can use the same name here
     public abstract class ListViewController<DataType, ItemType> : ListViewControllerBase
         where DataType : ListViewItemData
         where ItemType : ListViewItem<DataType>

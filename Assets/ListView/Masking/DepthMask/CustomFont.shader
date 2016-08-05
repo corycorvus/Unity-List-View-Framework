@@ -12,7 +12,7 @@
 		"RenderType" = "Transparent"
 		"PreviewType" = "Plane"
 	}
-		Lighting Off Cull Off ZWrite Off
+		Lighting Off ZWrite Off
 		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass{

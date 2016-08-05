@@ -8,6 +8,8 @@ This package is intended for experienced developers who want a starting-point fo
 
 The code is set up to be customizable, but not "intelligent" or comprehensive. In other words, this is not a one-size-fits-all solution with lots of options and internal logic to adapt to the type of data set.  Instead, the idea is to extend the core classes into a number of list types which handle different requirements throughout your project.  In this way, we avoid a single, monolithic and complex script file which is hard to read, and at the same time, we can ensure that our lists aren't wasting CPU cycles on unnecessary branching, i.e. if(horizontal) or if(smoothScrolling).  At the same time, developers are free to create their own one-size-fits-all implementation if they have the need to switch options on-the-fly, or if for some other reason their use case demands it.
 
+Examples are best viewed with a 16:9 viewport.
+
 #Usage#
 List view implementations will require at a minimum:
 

@@ -43,7 +43,8 @@ namespace ListView
         }
 
         void OnGUI()
-        {							
+        {
+	        GUI.skin = skin;		
             GUILayout.BeginArea(new Rect(10, 10, 300, 300));
             GUILayout.Label("This is an overly simplistic m_List view. Click the buttons below to scroll, or modify Data Offset in the inspector");
             if (GUILayout.Button("Scroll Next"))

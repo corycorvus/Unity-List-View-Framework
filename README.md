@@ -1,7 +1,5 @@
 # List View Framework #
 
-[TODO: Link to Asset Store]
-
 The List View Framework is a set of core classes which  can be used as-is or extended to create dynamic, scrollable lists in Unity applications.  This repository tracks the development of the package, which is also available on the Unity Asset Store. If you do not wish to contribute to the project, we recommend that you download and import the latest version on the Asset Store for your convenience.
 
 This package is intended for experienced developers who want a starting-point for customization. There are a number of working examples which may provide drop-in functionality, but they were developed as prototypes, and should be treated that way. The wiki contains in-depth explanations of the [Core Classes](https://bitbucket.org/Unity-Technologies/list-view-framework/wiki/Core%20Classes) and [Examples](https://bitbucket.org/Unity-Technologies/list-view-framework/wiki/Examples), but the easiest way to get started is to pick whichever example is closest to your intended use-case and work from there.
@@ -24,7 +22,5 @@ This project was developed on Unity 5.3, but could reasonably work on any versio
 
 The SQLite example has been tested on Windows and OS X.  It can probably work on smartphones as well, but the plugin-fu gets a little messy, so it is left as an exercise for the reader.
 
-[TODO: Find a link which explains how to use SQLite on Android/iOS]
-
-#Contributions#
-Anyone in the community is welcome to submit a pull request with a fix or improvement.  Due to the template nature of this project, it probably makes more sense for developers to create their own forks if they want to drastically change the core classes. Extra examples and fixes to existing examples, on the other hand, are greatly appreciated!
+#Forks#
+Anyone in the community is welcome to create their own forks. Drop us a note to labs@unity3d.com if you find it useful, we'd love to hear from you!

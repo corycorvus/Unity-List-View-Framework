@@ -23,4 +23,4 @@ This project was developed on Unity 5.3, but could reasonably work on any versio
 The SQLite example has been tested on Windows and OS X.  It can probably work on smartphones as well, but the plugin-fu gets a little messy, so it is left as an exercise for the reader.
 
 #Forks#
-Anyone in the community is welcome to create their own forks. Drop us a note to labs@unity3d.com if you find it useful, we'd love to hear from you!
+Anyone in the community is welcome to create their own forks. Drop us a note to labs@unity3d.com if you find this package useful, we'd love to hear from you!

@@ -8,6 +8,8 @@ The code is set up to be customizable, but not "intelligent" or comprehensive. I
 
 Examples are best viewed with a 16:9 viewport.
 
+More details about the design and implementation of this framework on our [Unity Labs website] (https://labs.unity.com/article/list-view-framework)
+
 #Usage#
 List view implementations will require at a minimum:
 

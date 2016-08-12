@@ -20,7 +20,9 @@ List view implementations will require at a minimum:
 The ListViewController by default contains a simple array of ListViewData objects.  Refer to examples 4 and above for how to utilize different types of data sources. The simplest examples use the Inspector to fill out a list of data, which is nice for example purposes but quickly becomes tedious in production.  One major advantage of the approach used by this project is that not all data must be available at once. See the Dictionary and Web Data examples for how that is done. Certain features require the ability to know the total row count, or other properties of the data-set, but the system is flexible enough to just cut those features if that information does not exist.
 
 #Requirements#
-This project was developed on Unity 5.3, but could reasonably work on any version of Unity, since it doesn't rely on particularly new APIs.  The examples make use of the Standard shader, so will require Unity 5+, but you have full control over the template object, so that isn't really a requirement.
+**Warning:** All examples require Unity 5.4+; earlier versions break necessary prefabs.
+
+This project was developed on Unity 5.4, but could reasonably work on any version of Unity, since it doesn't rely on particularly new APIs.  The examples make use of the Standard shader, so will require Unity 5+, but you have full control over the template object, so that isn't really a requirement.
 
 The SQLite example has been tested on Windows and OS X.  It can probably work on smartphones as well, but the plugin-fu gets a little messy, so it is left as an exercise for the reader.
 

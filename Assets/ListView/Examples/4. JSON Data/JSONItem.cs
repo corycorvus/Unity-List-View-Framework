@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class JSONItem : ListViewItem<JSONItemData>
+    class JSONItem : ListViewItem<JSONItemData, int>
     {
         public TextMesh label;
 
@@ -13,7 +13,7 @@ namespace ListView
         }
     }
 
-    public class JSONItemData : CubeItemData
+    class JSONItemData : CubeItemData
     {
         public void FromJSON(JSONObject obj)
         {

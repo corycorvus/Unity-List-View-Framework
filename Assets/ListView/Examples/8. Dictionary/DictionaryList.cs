@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Data;
 using System.IO;
@@ -10,7 +11,7 @@ using Mono.Data.Sqlite;
 
 namespace ListView
 {
-    public class DictionaryList : ListViewController<DictionaryListItemData, DictionaryListItem>
+    public class DictionaryList : ListViewController<DictionaryListItemData, DictionaryListItem, int>
     {
         public const string editorDatabasePath = "ListView/Examples/8. Dictionary/wordnet30.db";
         public const string databasePath = "wordnet30.db";
@@ -24,7 +25,7 @@ namespace ListView
         public int definitionCharacterWrap = 40; //Wrap definition after 40 characters
         public int maxDefinitionLines = 4; //Max 4 lines per definition
 
-        delegate void WordsResult(DictionaryListItemData[] words);
+        delegate void WordsResult(List<DictionaryListItemData> words);
 
         volatile bool m_DBLock;
 
@@ -76,9 +77,7 @@ namespace ListView
 
             data = null;
             //Start off with some data
-            GetWords(0, batchSize * 3, words => {
-                                                    data = words;
-            });
+            GetWords(0, batchSize * 3, words => { data = words; });
         }
 
         void OnDestroy()
@@ -104,7 +103,7 @@ namespace ListView
             {
                 try
                 {
-                    DictionaryListItemData[] words = new DictionaryListItemData[range];
+                    var words = new List<DictionaryListItemData>(range);
                     IDbCommand dbcmd = m_DBConnection.CreateCommand();
                     string sqlQuery = string.Format("SELECT lemma, definition FROM word as W JOIN sense as S on W.wordid=S.wordid JOIN synset as Y on S.synsetid=Y.synsetid ORDER BY W.wordid limit {0} OFFSET {1}", range, offset);
                     dbcmd.CommandText = sqlQuery;
@@ -162,114 +161,114 @@ namespace ListView
 
         protected override void ComputeConditions()
         {
-            if (templates.Length > 0)
+            if (m_Templates.Length > 0)
             {
                 //Use first template to get item size
-                m_ItemSize = GetObjectSize(templates[0]);
+                m_ItemSize = GetObjectSize(m_Templates[0]);
             }
             //Resize range to nearest multiple of item width
-            m_NumItems = Mathf.RoundToInt(range / m_ItemSize.y); //Number of cards that will fit
-            range = m_NumItems * m_ItemSize.y;
+            //m_NumItems = Mathf.RoundToInt(listHeight / itemSize.y); //Number of cards that will fit
+            //range = m_NumItems * m_ItemSize.y;
 
             //Get initial conditions. This procedure is done every frame in case the collider bounds change at runtime
-            m_LeftSide = transform.position + Vector3.up * range * 0.5f + Vector3.left * m_ItemSize.x * 0.5f;
+            m_StartPosition = transform.position + Vector3.up * listHeight * 0.5f + Vector3.left * itemSize.x * 0.5f;
 
-            m_DataOffset = (int) (scrollOffset / itemSize.y);
-            if (scrollOffset < 0)
-                m_DataOffset--;
+            //m_DataOffset = (int) (scrollOffset / itemSize.y);
+            //if (scrollOffset < 0)
+            //    m_DataOffset--;
 
-            int currBatch = -m_DataOffset / batchSize;
-            if (-m_DataOffset > (m_BatchOffset + 2) * batchSize)
-            {
-                //Check how many batches we jumped
-                if (currBatch == m_BatchOffset + 2)
-                { //Just one batch, fetch only the next one
-                    GetWords((m_BatchOffset + 3) * batchSize, batchSize, words =>
-                    {
-                        Array.Copy(data, batchSize, data, 0, batchSize * 2);
-                        Array.Copy(words, 0, data, batchSize * 2, batchSize);
-                        m_BatchOffset++;
-                    });
-                } else if (currBatch != m_BatchOffset)
-                { //Jumped multiple batches. Get a whole new dataset
-                    if (!m_Loading)
-                        m_Cleanup = data;
-                    m_Loading = true;
-                    GetWords((currBatch - 1) * batchSize, batchSize * 3, words =>
-                    {
-                        data = words;
-                        m_BatchOffset = currBatch - 1;
-                    });
-                }
-            } else if (m_BatchOffset > 0 && -m_DataOffset < (m_BatchOffset + 1) * batchSize)
-            {
-                if (currBatch == m_BatchOffset)
-                { //Just one batch, fetch only the next one
-                    GetWords((m_BatchOffset - 1) * batchSize, batchSize, words =>
-                    {
-                        Array.Copy(data, 0, data, batchSize, batchSize * 2);
-                        Array.Copy(words, 0, data, 0, batchSize);
-                        m_BatchOffset--;
-                    });
-                } else if (currBatch != m_BatchOffset)
-                { //Jumped multiple batches. Get a whole new dataset
-                    if (!m_Loading)
-                        m_Cleanup = data;
-                    m_Loading = true;
-                    if (currBatch < 1)
-                        currBatch = 1;
-                    GetWords((currBatch - 1) * batchSize, batchSize * 3, words =>
-                    {
-                        data = words;
-                        m_BatchOffset = currBatch - 1;
-                    });
-                }
-            }
-            if (m_Cleanup != null)
-            {
-                //Clean up all existing gameobjects
-                foreach (var item in m_Cleanup)
-                {
-                    if (item.item != null)
-                    {
-                        RecycleItem(item.template, item.item);
-                        item.item = null;
-                    }
-                }
-                m_Cleanup = null;
-            }
+            //int currBatch = -m_DataOffset / batchSize;
+            //if (-m_DataOffset > (m_BatchOffset + 2) * batchSize)
+            //{
+            //    //Check how many batches we jumped
+            //    if (currBatch == m_BatchOffset + 2)
+            //    { //Just one batch, fetch only the next one
+            //        GetWords((m_BatchOffset + 3) * batchSize, batchSize, words =>
+            //        {
+            //            Array.Copy(data, batchSize, data, 0, batchSize * 2);
+            //            Array.Copy(words, 0, data, batchSize * 2, batchSize);
+            //            m_BatchOffset++;
+            //        });
+            //    } else if (currBatch != m_BatchOffset)
+            //    { //Jumped multiple batches. Get a whole new dataset
+            //        if (!m_Loading)
+            //            m_Cleanup = data;
+            //        m_Loading = true;
+            //        GetWords((currBatch - 1) * batchSize, batchSize * 3, words =>
+            //        {
+            //            data = words;
+            //            m_BatchOffset = currBatch - 1;
+            //        });
+            //    }
+            //} else if (m_BatchOffset > 0 && -m_DataOffset < (m_BatchOffset + 1) * batchSize)
+            //{
+            //    if (currBatch == m_BatchOffset)
+            //    { //Just one batch, fetch only the next one
+            //        GetWords((m_BatchOffset - 1) * batchSize, batchSize, words =>
+            //        {
+            //            Array.Copy(data, 0, data, batchSize, batchSize * 2);
+            //            Array.Copy(words, 0, data, 0, batchSize);
+            //            m_BatchOffset--;
+            //        });
+            //    } else if (currBatch != m_BatchOffset)
+            //    { //Jumped multiple batches. Get a whole new dataset
+            //        if (!m_Loading)
+            //            m_Cleanup = data;
+            //        m_Loading = true;
+            //        if (currBatch < 1)
+            //            currBatch = 1;
+            //        GetWords((currBatch - 1) * batchSize, batchSize * 3, words =>
+            //        {
+            //            data = words;
+            //            m_BatchOffset = currBatch - 1;
+            //        });
+            //    }
+            //}
+            //if (m_Cleanup != null)
+            //{
+            //    //Clean up all existing gameobjects
+            //    foreach (var item in m_Cleanup)
+            //    {
+            //        if (item.item != null)
+            //        {
+            //            RecycleItem(item.template, item.item);
+            //            item.item = null;
+            //        }
+            //    }
+            //    m_Cleanup = null;
+            //}
 
-            if (m_Scrolling)
-            {
-                m_ScrollDelta = (scrollOffset - m_LastScrollOffset) / Time.deltaTime;
-                m_LastScrollOffset = scrollOffset;
-                if (m_ScrollDelta > maxMomentum)
-                    m_ScrollDelta = maxMomentum;
-                if (m_ScrollDelta < -maxMomentum)
-                    m_ScrollDelta = -maxMomentum;
-            } else
-            {
-                scrollOffset += m_ScrollDelta * Time.deltaTime;
-                if (m_ScrollDelta > 0)
-                {
-                    m_ScrollDelta -= scrollDamping * Time.deltaTime;
-                    if (m_ScrollDelta < 0)
-                    {
-                        m_ScrollDelta = 0;
-                    }
-                } else if (m_ScrollDelta < 0)
-                {
-                    m_ScrollDelta += scrollDamping * Time.deltaTime;
-                    if (m_ScrollDelta > 0)
-                    {
-                        m_ScrollDelta = 0;
-                    }
-                }
-            }
-            if (m_DataOffset >= m_DataLength)
-            {
-                m_ScrollReturn = scrollOffset;
-            }
+            //if (m_Scrolling)
+            //{
+            //    m_ScrollDelta = (scrollOffset - m_LastScrollOffset) / Time.deltaTime;
+            //    m_LastScrollOffset = scrollOffset;
+            //    if (m_ScrollDelta > maxMomentum)
+            //        m_ScrollDelta = maxMomentum;
+            //    if (m_ScrollDelta < -maxMomentum)
+            //        m_ScrollDelta = -maxMomentum;
+            //} else
+            //{
+            //    scrollOffset += m_ScrollDelta * Time.deltaTime;
+            //    if (m_ScrollDelta > 0)
+            //    {
+            //        m_ScrollDelta -= scrollDamping * Time.deltaTime;
+            //        if (m_ScrollDelta < 0)
+            //        {
+            //            m_ScrollDelta = 0;
+            //        }
+            //    } else if (m_ScrollDelta < 0)
+            //    {
+            //        m_ScrollDelta += scrollDamping * Time.deltaTime;
+            //        if (m_ScrollDelta > 0)
+            //        {
+            //            m_ScrollDelta = 0;
+            //        }
+            //    }
+            //}
+            //if (m_DataOffset >= m_DataLength)
+            //{
+            //    m_ScrollReturn = scrollOffset;
+            //}
         }
 
         public void OnStartScrolling()
@@ -293,32 +292,32 @@ namespace ListView
             }
         }
 
-        protected override void UpdateItems()
-        {
-            if (data == null || data.Length == 0 || m_Loading)
-            {
-                loadingIndicator.SetActive(true);
-                return;
-            }
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (i + m_DataOffset + m_BatchOffset * batchSize < -1)
-                { //Checking against -1 lets the first element overflow
-                    ExtremeLeft(data[i]);
-                } else if (i + m_DataOffset + m_BatchOffset * batchSize > m_NumItems)
-                {
-                    ExtremeRight(data[i]);
-                } else
-                {
-                    ListMiddle(data[i], i + m_BatchOffset * batchSize);
-                }
-            }
-            loadingIndicator.SetActive(false);
-        }
+        //protected override void UpdateItems()
+        //{
+        //    if (data == null || data.Length == 0 || m_Loading)
+        //    {
+        //        loadingIndicator.SetActive(true);
+        //        return;
+        //    }
+        //    for (int i = 0; i < data.Length; i++)
+        //    {
+        //        if (i + m_DataOffset + m_BatchOffset * batchSize < -1)
+        //        { //Checking against -1 lets the first element overflow
+        //            ExtremeLeft(data[i]);
+        //        } else if (i + m_DataOffset + m_BatchOffset * batchSize > m_NumItems)
+        //        {
+        //            ExtremeRight(data[i]);
+        //        } else
+        //        {
+        //            ListMiddle(data[i], i + m_BatchOffset * batchSize);
+        //        }
+        //    }
+        //    loadingIndicator.SetActive(false);
+        //}
 
-        protected override void Positioning(Transform t, int offset)
-        {
-            t.position = m_LeftSide + (offset * m_ItemSize.y + scrollOffset) * Vector3.down;
-        }
+        //protected override void Positioning(Transform t, int offset)
+        //{
+        //    t.position = m_LeftSide + (offset * m_ItemSize.y + scrollOffset) * Vector3.down;
+        //}
     }
 }

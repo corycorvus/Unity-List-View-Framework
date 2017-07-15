@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ListView
 {
-    public class NestedJSONItem : ListViewItem<NestedJSONItemData>
+    class NestedJSONItem : ListViewItem<NestedJSONItemData, int>
     {
         public TextMesh label;
 
@@ -11,10 +12,15 @@ namespace ListView
             base.Setup(data);
             label.text = data.text;
         }
+
+        public void ToggleExpanded()
+        {
+            Debug.Log("WIP");
+        }
     }
 
-//[System.Serializable]     //Will cause warnings, but helpful for debugging
-    public class NestedJSONItemData : ListViewItemNestedData<NestedJSONItemData>
+    //[System.Serializable]     //Will cause warnings, but helpful for debugging
+    class NestedJSONItemData : ListViewItemNestedData<NestedJSONItemData, int>
     {
         public string text;
 
@@ -24,7 +30,7 @@ namespace ListView
             this.template = template;
             obj.GetField("children", delegate(JSONObject _children)
             {
-                children = new NestedJSONItemData[_children.Count];
+                children = new List<NestedJSONItemData>(_children.Count);
                 for (int i = 0; i < _children.Count; i++)
                 {
                     children[i] = new NestedJSONItemData();

@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 //Uses JSONObject http://u3d.as/1Rh
 
 namespace ListView
 {
-    public class JSONList : ListViewController<JSONItemData, JSONItem>
+    class JSONList : ListViewController<JSONItemData, JSONItem, int>
     {
         public string dataFile;
         public string defaultTemplate;
@@ -12,18 +13,23 @@ namespace ListView
         protected override void Setup()
         {
             base.Setup();
-            TextAsset text = Resources.Load<TextAsset>(dataFile);
+            var text = Resources.Load<TextAsset>(dataFile);
             if (text)
             {
-                JSONObject obj = new JSONObject(text.text);
-                data = new JSONItemData[obj.Count];
-                for (int i = 0; i < data.Length; i++)
+                var obj = new JSONObject(text.text);
+                data = new List<JSONItemData>(obj.Count);
+                for (var i = 0; i < data.Count; i++)
                 {
-                    data[i] = new JSONItemData();
-                    data[i].FromJSON(obj[i]);
-                    data[i].template = defaultTemplate;
+                    var child = new JSONItemData();
+                    child.FromJSON(obj[i]);
+                    child.template = defaultTemplate;
+                    data.Add(child);
                 }
-            } else data = new JSONItemData[0];
+            }
+            else
+            {
+                data = null;
+            }
         }
     }
 }

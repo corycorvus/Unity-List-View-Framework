@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class CardGameInputHandler : ListViewInputHandler
+    class CardGameInputHandler : ListViewInputHandler
     {
         public CardGameHand hand;
 

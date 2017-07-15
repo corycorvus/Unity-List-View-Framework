@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ListView
 {
-    public class AdvancedListItem : ListViewItem<AdvancedListItemData>
+    class AdvancedListItem : ListViewItem<AdvancedListItemData, int>
     {
         public TextMesh title;
 
@@ -16,8 +17,8 @@ namespace ListView
         }
     }
 
-//[System.Serializable]     //Will cause warnings, but helpful for debugging
-    public class AdvancedListItemData : ListViewItemNestedData<AdvancedListItemData>
+    //[System.Serializable]     //Will cause warnings, but helpful for debugging
+    class AdvancedListItemData : ListViewItemNestedData<AdvancedListItemData, int>
     {
         public string title, description, model;
         public AdvancedList list;
@@ -28,14 +29,17 @@ namespace ListView
             obj.GetField(ref title, "title");
             obj.GetField(ref description, "description");
             obj.GetField(ref model, "model");
+            var template = "";
             obj.GetField(ref template, "template");
+            this.template = template;
             obj.GetField("children", delegate(JSONObject _children)
             {
-                children = new AdvancedListItemData[_children.Count];
-                for (int i = 0; i < _children.Count; i++)
+                children = new List<AdvancedListItemData>(_children.Count);
+                for (var i = 0; i < _children.Count; i++)
                 {
-                    children[i] = new AdvancedListItemData();
-                    children[i].FromJSON(_children[i], list);
+                    var child = new AdvancedListItemData();
+                    child.FromJSON(_children[i], list);
+                    children.Add(child);
                 }
             });
         }

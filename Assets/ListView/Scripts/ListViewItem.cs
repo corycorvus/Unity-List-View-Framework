@@ -1,55 +1,22 @@
-﻿using UnityEngine;       
-using System.Collections.Generic;
+﻿using System;
+using UnityEngine;
 
 namespace ListView
 {
-    public class ListViewItem : ListViewItem<ListViewItemInspectorData>
-    {
-    }
+    class ListViewItem : ListViewItem<ListViewItemInspectorData, int> { }
 
-    [RequireComponent(typeof (Collider))]
-    public class ListViewItemBase : MonoBehaviour
-    {
-    }
+    public class ListViewItemBase : MonoBehaviour { }
 
-    public class ListViewItem<DataType> : ListViewItemBase where DataType : ListViewItemData
+    public class ListViewItem<TData, TIndex> : ListViewItemBase where TData : ListViewItemData<TIndex>
     {
-        public DataType data;
+        public TData data { get; set; }
+        public Action<Action> startSettling { protected get; set; }
+        public Action endSettling { protected get; set; }
+        public Func<TIndex, ListViewItem<TData, TIndex>> getListItem { protected get; set; }
 
-        public virtual void Setup(DataType data)
+        public virtual void Setup(TData data)
         {
             this.data = data;
-            data.item = this;
-        }
-    }
-
-    public class ListViewItemData
-    {
-        public string template;
-        public MonoBehaviour item;
-    }
-
-    public class ListViewItemNestedData<ChildType> : ListViewItemData
-    {
-        public bool expanded;
-        public ChildType[] children;
-    }
-
-    [System.Serializable]
-    public class ListViewItemInspectorData : ListViewItemData
-    {
-    }
-
-    public class ListViewItemTemplate
-    {
-        public readonly GameObject prefab;
-        public readonly List<MonoBehaviour> pool = new List<MonoBehaviour>();
-
-        public ListViewItemTemplate(GameObject prefab)
-        {
-            if (prefab == null)
-                Debug.LogError("Template prefab cannot be null");
-            this.prefab = prefab;
         }
     }
 }

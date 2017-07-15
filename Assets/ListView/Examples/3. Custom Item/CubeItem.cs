@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class CubeItem : ListViewItem<CubeItemData>
+    class CubeItem : ListViewItem<CubeItemData, int>
     {
         public TextMesh label;
 
@@ -14,7 +14,7 @@ namespace ListView
     }
 
     [System.Serializable]
-    public class CubeItemData : ListViewItemData
+    class CubeItemData : ListViewItemData<int>
     {
         public string text;
     }

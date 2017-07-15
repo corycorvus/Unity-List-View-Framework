@@ -1,202 +1,176 @@
-﻿using UnityEngine;       
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ListView
 {
-    public class ListViewController : ListViewController<ListViewItemInspectorData, ListViewItem>
+    class ListViewController : ListViewController<ListViewItemInspectorData, ListViewItem, int> { }
+
+    public abstract class ListViewController<TData, TItem, TIndex> : ListViewControllerBase
+        where TData : ListViewItemData<TIndex>
+        where TItem : ListViewItem<TData, TIndex>
     {
-    }
-
-    public abstract class ListViewControllerBase : MonoBehaviour
-    {
-        //Public variables
-        [Tooltip("Distance (in meters) we have scrolled from initial position")]
-        public float scrollOffset;
-        [Tooltip("Padding (in meters) between items")]
-        public float padding = 0.01f;
-        [Tooltip("Width (in meters) of visible region")]
-        public float range = 1;
-        [Tooltip("Item temlate prefabs (at least one is required)")]
-        public GameObject[] templates;
-
-        //Protected variables
-        protected int m_DataOffset;
-        protected int m_NumItems;
-        protected Vector3 m_LeftSide;
-        protected Vector3 m_ItemSize;
-        protected readonly Dictionary<string, ListViewItemTemplate> m_Templates = new Dictionary<string, ListViewItemTemplate>();
-
-        //Public properties
-        public Vector3 itemSize
+        public virtual List<TData> data
         {
-            get { return m_ItemSize; }
+            get { return m_Data; }
+            set
+            {
+                if (m_Data != null)
+                {
+                    foreach (var item in m_ListItems.Values) // Clear out visuals for old data
+                    {
+                        RecycleItem(item.data.template, item);
+                    }
+
+                    m_ListItems.Clear();
+                }
+
+                m_Data = value;
+                scrollOffset = 0;
+            }
         }
 
-        void Start()
+        [SerializeField]
+        protected List<TData> m_Data;
+
+        protected readonly Dictionary<string, ListViewItemTemplate<TItem>> m_TemplateDictionary = new Dictionary<string, ListViewItemTemplate<TItem>>();
+        protected readonly Dictionary<TIndex, TItem> m_ListItems = new Dictionary<TIndex, TItem>();
+        protected readonly Dictionary<TIndex, Transform> m_GrabbedRows = new Dictionary<TIndex, Transform>();
+
+        protected override float listHeight
         {
-            Setup();
+            get { return m_Data == null ? 0 : m_Data.Count * itemSize.z; }
         }
 
-        void Update()
+        protected override void Setup()
         {
-            ViewUpdate();
-        }
-
-        protected virtual void Setup()
-        {
-            if (templates.Length < 1)
+            if (m_Templates.Length < 1)
             {
                 Debug.LogError("No templates!");
             }
-            foreach (var template in templates)
+            foreach (var template in m_Templates)
             {
-                if (m_Templates.ContainsKey(template.name))
+                if (m_TemplateDictionary.ContainsKey(template.name))
                     Debug.LogError("Two templates cannot have the same name");
-                m_Templates[template.name] = new ListViewItemTemplate(template);
+                m_TemplateDictionary[template.name] = new ListViewItemTemplate<TItem>(template);
             }
         }
-
-        protected virtual void ViewUpdate()
-        {
-            ComputeConditions();
-            UpdateItems();
-        }
-
-        protected virtual void ComputeConditions()
-        {
-            if (templates.Length > 0)
-            {
-                //Use first template to get item size
-                m_ItemSize = GetObjectSize(templates[0]);
-            }
-            //Resize range to nearest multiple of item width
-            m_NumItems = Mathf.RoundToInt(range / m_ItemSize.x); //Number of cards that will fit
-            range = m_NumItems * m_ItemSize.x;
-
-            //Get initial conditions. This procedure is done every frame in case the collider bounds change at runtime
-            m_LeftSide = transform.position + Vector3.left * range * 0.5f;
-
-            m_DataOffset = (int) (scrollOffset / itemSize.x);
-            if (scrollOffset < 0)
-                m_DataOffset--;
-        }
-
-        protected abstract void UpdateItems();
-
-        public virtual void ScrollNext()
-        {
-            scrollOffset += m_ItemSize.x;
-        }
-
-        public virtual void ScrollPrev()
-        {
-            scrollOffset -= m_ItemSize.x;
-        }
-
-        public virtual void ScrollTo(int index)
-        {
-            scrollOffset = index * itemSize.x;
-        }
-
-        protected virtual void Positioning(Transform t, int offset)
-        {
-            t.position = m_LeftSide + (offset * m_ItemSize.x + scrollOffset) * Vector3.right;
-        }
-
-        protected virtual Vector3 GetObjectSize(GameObject g)
-        {
-            Vector3 itemSize = Vector3.one;
-            //TODO: Better method for finding object size
-            Renderer rend = g.GetComponentInChildren<Renderer>();
-            if (rend)
-            {
-                itemSize.x = Vector3.Scale(g.transform.lossyScale, rend.bounds.extents).x * 2 + padding;
-                itemSize.y = Vector3.Scale(g.transform.lossyScale, rend.bounds.extents).y * 2 + padding;
-                itemSize.z = Vector3.Scale(g.transform.lossyScale, rend.bounds.extents).z * 2 + padding;
-            }
-            return itemSize;
-        }
-
-        protected virtual void RecycleItem(string template, MonoBehaviour item)
-        {
-            if (item == null || template == null)
-                return;
-            m_Templates[template].pool.Add(item);
-            item.gameObject.SetActive(false);
-        }
-    }
-
-    public abstract class ListViewController<DataType, ItemType> : ListViewControllerBase
-        where DataType : ListViewItemData
-        where ItemType : ListViewItem<DataType>
-    {
-        [Tooltip("Source Data")]
-        public DataType[] data;
 
         protected override void UpdateItems()
         {
-            for (int i = 0; i < data.Length; i++)
+            var doneSettling = true;
+
+            var offset = 0f;
+            var order = 0;
+            Debug.Log(m_Data);
+            for (var i = 0; i < m_Data.Count; i++)
             {
-                if (i + m_DataOffset < 0)
-                {
-                    ExtremeLeft(data[i]);
-                } else if (i + m_DataOffset > m_NumItems)
-                {
-                    ExtremeRight(data[i]);
-                } else
-                {
-                    ListMiddle(data[i], i);
-                }
+                var datum = m_Data[i];
+                if (offset + scrollOffset + itemSize.z < 0 || offset + scrollOffset > m_Size.z)
+                    Recycle(datum.index);
+                else
+                    UpdateVisibleItem(datum, order++, i * itemSize.z + m_ScrollOffset, ref doneSettling);
+
+                offset += itemSize.z;
+            }
+
+            if (m_Settling && doneSettling)
+                EndSettling();
+        }
+
+        protected virtual void Recycle(TIndex index)
+        {
+            if (m_GrabbedRows.ContainsKey(index))
+                return;
+
+            TItem item;
+            if (m_ListItems.TryGetValue(index, out item))
+            {
+                RecycleItem(item.data.template, item);
+                m_ListItems.Remove(index);
             }
         }
 
-        protected virtual void ExtremeLeft(DataType data)
+        protected virtual void RecycleItem(string template, TItem item)
         {
-            RecycleItem(data.template, data.item);
-            data.item = null;
+            if (item == null || template == null)
+                return;
+
+            m_TemplateDictionary[template].pool.Add(item);
+            item.gameObject.SetActive(false);
         }
 
-        protected virtual void ExtremeRight(DataType data)
+        protected virtual void UpdateVisibleItem(TData data, int order, float offset, ref bool doneSettling)
         {
-            RecycleItem(data.template, data.item);
-            data.item = null;
-        }
-
-        protected virtual void ListMiddle(DataType data, int offset)
-        {
-            if (data.item == null)
+            TItem item;
+            var index = data.index;
+            if (!m_ListItems.TryGetValue(index, out item))
             {
-                data.item = GetItem(data);
+                item = GetItem(data);
+                m_ListItems[index] = item;
             }
-            Positioning(data.item.transform, offset);
+
+            UpdateItem(item.transform, order, offset, ref doneSettling);
         }
 
-        protected virtual ItemType GetItem(DataType data)
+        protected virtual void SetRowGrabbed(TIndex index, Transform rayOrigin, bool grabbed)
+        {
+            if (grabbed)
+                m_GrabbedRows[index] = rayOrigin;
+            else
+                m_GrabbedRows.Remove(index);
+        }
+
+        protected virtual TItem GetGrabbedRow(Transform rayOrigin)
+        {
+            foreach (var row in m_GrabbedRows)
+            {
+                if (row.Value == rayOrigin)
+                    return GetListItem(row.Key);
+            }
+            return null;
+        }
+
+        protected TItem GetListItem(TIndex index)
+        {
+            TItem item;
+            return m_ListItems.TryGetValue(index, out item) ? item : null;
+        }
+
+        protected virtual TItem GetItem(TData data)
         {
             if (data == null)
             {
                 Debug.LogWarning("Tried to get item with null data");
                 return null;
             }
-            if (!m_Templates.ContainsKey(data.template))
+
+            if (!m_TemplateDictionary.ContainsKey(data.template))
             {
                 Debug.LogWarning("Cannot get item, template " + data.template + " doesn't exist");
                 return null;
             }
-            ItemType item = null;
-            if (m_Templates[data.template].pool.Count > 0)
+
+            TItem item;
+            if (m_TemplateDictionary[data.template].pool.Count > 0)
             {
-                item = (ItemType) m_Templates[data.template].pool[0];
-                m_Templates[data.template].pool.RemoveAt(0);
+                item = m_TemplateDictionary[data.template].pool[0];
+                m_TemplateDictionary[data.template].pool.RemoveAt(0);
 
                 item.gameObject.SetActive(true);
                 item.Setup(data);
-            } else
+            }
+            else
             {
-                item = Instantiate(m_Templates[data.template].prefab).GetComponent<ItemType>();
-                item.transform.parent = transform;
+                item = Instantiate(m_TemplateDictionary[data.template].prefab, transform, false).GetComponent<TItem>();
                 item.Setup(data);
             }
+
+            m_ListItems[data.index] = item;
+
+            item.startSettling = StartSettling;
+            item.endSettling = EndSettling;
+            item.getListItem = GetListItem;
+
             return item;
         }
     }

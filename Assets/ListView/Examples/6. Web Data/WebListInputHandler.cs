@@ -15,7 +15,7 @@ namespace ListView
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
                 {
-                    ListViewItemBase item = hit.collider.GetComponent<ListViewItemBase>();
+                    var item = hit.collider.GetComponent<JSONItem>();
                     if (item)
                     {
                         m_ListDepth = (hit.point - Camera.main.transform.position).magnitude;

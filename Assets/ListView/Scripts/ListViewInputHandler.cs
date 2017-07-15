@@ -1,9 +1,9 @@
-﻿using UnityEngine;       
+﻿using UnityEngine;
 
 namespace ListView
 {
     public abstract class ListViewInputHandler : MonoBehaviour
-    {                              
+    {
         public ListViewControllerBase listView;
 
         void Update()

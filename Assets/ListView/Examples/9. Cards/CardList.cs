@@ -8,7 +8,7 @@ using Random = System.Random;
 
 namespace ListView
 {
-    public class CardList : ListViewController<CardData, Card>
+    class CardList : ListViewController<CardData, Card, int>
     {
         public string defaultTemplate = "Card";
         public float interpolate = 15f;
@@ -17,19 +17,16 @@ namespace ListView
         public float scrollSpeed = 1;
         public Transform leftDeck, rightDeck;
 
-        float m_ScrollReturn = float.MaxValue;
-        float m_LastScrollOffset;
-
         protected override void Setup()
         {
             base.Setup();
 
-            List<CardData> dataList = new List<CardData>(52);
-            for (int i = 0; i < 4; i++)
+            var dataList = new List<CardData>(52);
+            for (var i = 0; i < 4; i++)
             {
-                for (int j = 1; j < 14; j++)
+                for (var j = 1; j < 14; j++)
                 {
-                    CardData card = new CardData();
+                    var card = new CardData();
                     switch (j)
                     {
                         case 1:
@@ -53,13 +50,13 @@ namespace ListView
                     dataList.Add(card);
                 }
             }
-            Random rnd = new Random();
-            data = dataList.OrderBy(x => rnd.Next()).ToArray();
+            var rnd = new Random();
+            data = dataList.OrderBy(x => rnd.Next()).ToList();
         }
 
         void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(transform.position, new Vector3(range, itemSize.y, itemSize.z));
+            Gizmos.DrawWireCube(transform.position, new Vector3(listHeight, itemSize.y, itemSize.z));
         }
 
         public void OnStopScrolling()
@@ -75,68 +72,87 @@ namespace ListView
             }
         }
 
+        protected override void ComputeConditions()
+        {
+            base.ComputeConditions();
+            m_StartPosition = (m_Extents.z - itemSize.z * 0.5f) * Vector3.left;
+        }
+
         protected override void UpdateItems()
         {
             if (autoScroll)
             {
                 scrollOffset -= scrollSpeed * Time.deltaTime;
-                if (-scrollOffset > (data.Length - m_NumItems) * itemSize.x || scrollOffset >= 0)
+                if (-scrollOffset > listHeight || scrollOffset >= 0)
                     scrollSpeed *= -1;
             }
-            for (int i = 0; i < data.Length; i++)
+
+            var doneSettling = true;
+            var offset = 0f;
+            var order = 0;
+            for (var i = 0; i < m_Data.Count; i++)
             {
-                if (i + m_DataOffset < 0)
+                var datum = m_Data[i];
+                if (offset + scrollOffset + itemSize.z < 0)
                 {
-                    ExtremeLeft(data[i]);
-                } else if (i + m_DataOffset > m_NumItems - 1)
-                { //End the m_List one item early
-                    ExtremeRight(data[i]);
-                } else
+                    ExtremeLeft(datum);
+                }
+                else if (offset + scrollOffset > m_Size.z)
                 {
-                    ListMiddle(data[i], i);
+                    //End the m_List one item early
+                    ExtremeRight(datum);
+                }
+                else
+                {
+                    ListMiddle(datum, i, offset, ref doneSettling);
                 }
             }
             m_LastScrollOffset = scrollOffset;
+
+            if (m_Settling && doneSettling)
+                EndSettling();
         }
 
-        protected override void ExtremeLeft(CardData data)
+        void ExtremeLeft(CardData data)
         {
             RecycleItemAnimated(data, leftDeck);
         }
 
-        protected override void ExtremeRight(CardData data)
+        void ExtremeRight(CardData data)
         {
             RecycleItemAnimated(data, rightDeck);
         }
 
-        protected override void ListMiddle(CardData data, int offset)
+        void ListMiddle(CardData data, int order, float offset, ref bool doneSettling)
         {
-            if (data.item == null)
+            var index = data.index;
+            Card card;
+            if (!m_ListItems.TryGetValue(index, out card))
             {
-                data.item = GetItem(data);
+                card = GetItem(data);
                 if (scrollOffset - m_LastScrollOffset < 0)
                 {
-                    data.item.transform.position = rightDeck.transform.position;
-                    data.item.transform.rotation = rightDeck.transform.rotation;
+                    card.transform.position = rightDeck.transform.position;
+                    card.transform.rotation = rightDeck.transform.rotation;
                 } else
                 {
-                    data.item.transform.position = leftDeck.transform.position;
-                    data.item.transform.rotation = leftDeck.transform.rotation;
+                    card.transform.position = leftDeck.transform.position;
+                    card.transform.rotation = leftDeck.transform.rotation;
                 }
+
+                m_ListItems[index] = card;
             }
-            Positioning(data.item.transform, offset);
+            UpdateVisibleItem(data, order, offset, ref doneSettling);
         }
 
         void RecycleItemAnimated(CardData data, Transform destination)
         {
-            if (data.item == null)
-                return;
-            MonoBehaviour item = data.item;
-            data.item = null;
-            StartCoroutine(RecycleAnimation(item, data.template, destination, recycleDuration));
+            Card card;
+            if (m_ListItems.TryGetValue(data.index, out card))
+                StartCoroutine(RecycleAnimation(card, data.template, destination, recycleDuration));
         }
 
-        IEnumerator RecycleAnimation(MonoBehaviour card, string template, Transform destination, float speed)
+        IEnumerator RecycleAnimation(Card card, string template, Transform destination, float speed)
         {
             float start = Time.time;
             Quaternion startRot = card.transform.rotation;
@@ -152,9 +168,9 @@ namespace ListView
             RecycleItem(template, card);
         }
 
-        protected override void Positioning(Transform t, int offset)
+        protected override void UpdateItem(Transform t, int order, float offset, ref bool doneSettling)
         {
-            t.position = Vector3.Lerp(t.position, m_LeftSide + (offset * m_ItemSize.x + scrollOffset) * Vector3.right, interpolate * Time.deltaTime);
+            t.position = Vector3.Lerp(t.position, m_StartPosition + (offset * itemSize.x + scrollOffset) * Vector3.right, interpolate * Time.deltaTime);
             t.rotation = Quaternion.Lerp(t.rotation, Quaternion.identity, interpolate * Time.deltaTime);
         }
 

@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class AdvancedListItemChild : AdvancedListItem
+    class AdvancedListItemChild : AdvancedListItem
     {
         public TextMesh description;
         public Transform modelTransform;

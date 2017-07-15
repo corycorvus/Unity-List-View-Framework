@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class Card : ListViewItem<CardData>
+    class Card : ListViewItem<CardData, int>
     {
         public enum Suit
         {
@@ -145,7 +145,7 @@ namespace ListView
     }
 
     //[System.Serializable]     //Will cause warnings, but helpful for debugging
-    public class CardData : ListViewItemData
+    class CardData : ListViewItemData<int>
     {
         //Ace is 1, King is 13
         public string value;

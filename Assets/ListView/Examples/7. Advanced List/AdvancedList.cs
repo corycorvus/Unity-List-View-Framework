@@ -1,186 +1,151 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ListView
 {
-    class AdvancedList : ListViewController<AdvancedListItemData, AdvancedListItem, int>
+    class AdvancedList : NestedListViewController<AdvancedListItemData, AdvancedListItem, int>
     {
-        public string dataFile;
-        public GameObject[] models;
+        [FormerlySerializedAs("dataFile")]
+        [SerializeField]
+        public string m_DataFile;
 
-        readonly Dictionary<string, ModelPool> m_Models = new Dictionary<string, ModelPool>();
+        [FormerlySerializedAs("models")]
+        [SerializeField]
+        public GameObject[] m_Models;
+
+        [SerializeField]
+        float m_Range;
+
+        readonly Dictionary<string, ModelPool> m_ModelDictionary = new Dictionary<string, ModelPool>();
         readonly Dictionary<string, Vector3> m_TemplateSizes = new Dictionary<string, Vector3>();
-        float m_ScrollReturn = float.MaxValue;
-        float m_ItemHeight;
 
-        //protected override void Setup()
-        //{
-        //    base.Setup();
-        //    foreach (var kvp in m_Templates)
-        //    {
-        //        m_TemplateSizes[kvp.Key] = GetObjectSize(kvp.Value.prefab);
-        //    }
+        void Awake()
+        {
+            size = m_Range * Vector3.forward;
+        }
 
-        //    TextAsset text = Resources.Load<TextAsset>(dataFile);
-        //    if (text)
-        //    {
-        //        JSONObject obj = new JSONObject(text.text);
-        //        data = new AdvancedListItemData[obj.Count];
-        //        for (int i = 0; i < data.Length; i++)
-        //        {
-        //            data[i] = new AdvancedListItemData();
-        //            data[i].FromJSON(obj[i], this);
-        //        }
-        //    } else data = new AdvancedListItemData[0];
+        protected override void Setup()
+        {
+            base.Setup();
+            foreach (var kvp in m_TemplateDictionary)
+            {
+                m_TemplateSizes[kvp.Key] = GetObjectSize(kvp.Value.prefab);
+            }
 
-        //    if (models.Length < 1)
-        //    {
-        //        Debug.LogError("No models!");
-        //    }
-        //    foreach (var model in models)
-        //    {
-        //        if (m_Models.ContainsKey(model.name))
-        //            Debug.LogError("Two templates cannot have the same name");
-        //        m_Models[model.name] = new ModelPool(model);
-        //    }
-        //}
+            var text = Resources.Load<TextAsset>(m_DataFile);
+            if (text)
+            {
+                var obj = new JSONObject(text.text);
+                var length = obj.Count;
+                data = new List<AdvancedListItemData>(length);
+                var index = 0;
+                for (var i = 0; i < length; i++)
+                {
+                    var item = new AdvancedListItemData();
+                    item.FromJSON(obj[i], this, ref index);
+                    data.Add(item);
+                }
+            }
+            else
+            {
+                data = null;
+            }
 
-        //void OnDrawGizmos()
-        //{
-        //    Gizmos.DrawWireCube(transform.position, new Vector3(itemSize.x, range, itemSize.z));
-        //}
+            if (m_Models.Length < 1)
+            {
+                Debug.LogError("No models!");
+            }
 
-        //protected override void ComputeConditions()
-        //{
-        //    if (templates.Length > 0)
-        //    {
-        //        //Use first template to get item size
-        //        m_ItemSize = GetObjectSize(templates[0]);
-        //    }
-        //    //Resize range to nearest multiple of item width
-        //    m_NumItems = Mathf.RoundToInt(range / m_ItemSize.y); //Number of cards that will fit
-        //    range = m_NumItems * m_ItemSize.y;
+            foreach (var model in m_Models)
+            {
+                if (m_ModelDictionary.ContainsKey(model.name))
+                    Debug.LogError("Two templates cannot have the same name");
 
-        //    //Get initial conditions. This procedure is done every frame in case the collider bounds change at runtime
-        //    m_LeftSide = transform.position + Vector3.up * range * 0.5f + Vector3.left * itemSize.x * 0.5f;
+                m_ModelDictionary[model.name] = new ModelPool(model);
+            }
+        }
 
-        //    m_DataOffset = (int) (scrollOffset / itemSize.y);
-        //    if (scrollOffset < 0)
-        //        m_DataOffset--;
-        //}
+        void OnDrawGizmos()
+        {
+            Gizmos.DrawWireCube(transform.position, new Vector3(itemSize.x, m_Size.y, itemSize.z));
+        }
 
-        //protected override void UpdateItems()
-        //{
-        //    float totalOffset = 0;
-        //    UpdateRecursively(data, ref totalOffset);
-        //    totalOffset -= m_ItemHeight;
-        //    if (totalOffset < -scrollOffset)
-        //    {
-        //        m_ScrollReturn = -totalOffset;
-        //    }
-        //}
+        protected override void ComputeConditions()
+        {
+            base.ComputeConditions();
+            m_StartPosition = m_Extents - itemSize * 0.5f;
+        }
 
-        //void UpdateRecursively(AdvancedListItemData[] data, ref float totalOffset)
-        //{
-        //    foreach (var item in data)
-        //    {
-        //        m_ItemHeight = m_TemplateSizes[item.template].y;
-        //        if (totalOffset + scrollOffset + m_ItemHeight < 0)
-        //        {
-        //            ExtremeLeft(item);
-        //        } else if (totalOffset + scrollOffset > range)
-        //        {
-        //            ExtremeRight(item);
-        //        } else
-        //        {
-        //            ListMiddle(item, totalOffset + scrollOffset);
-        //        }
-        //        totalOffset += m_ItemHeight;
-        //        if (item.children != null)
-        //        {
-        //            if (item.expanded)
-        //            {
-        //                UpdateRecursively(item.children, ref totalOffset);
-        //            } else
-        //            {
-        //                RecycleChildren(item);
-        //            }
-        //        }
-        //    }
-        //}
+        protected override void UpdateRecursively(List<AdvancedListItemData> data, ref int order, ref float offset, ref bool doneSettling, int depth = 0)
+        {
+            for (var i = 0; i < data.Count; i++)
+            {
+                var datum = data[i];
 
-        //void ListMiddle(AdvancedListItemData data, float offset)
-        //{
-        //    if (data.item == null)
-        //    {
-        //        data.item = GetItem(data);
-        //    }
-        //    Positioning(data.item.transform, offset);
-        //}
+                var index = datum.index;
+                bool expanded;
+                if (!m_ExpandStates.TryGetValue(index, out expanded))
+                    m_ExpandStates[index] = false;
 
-        //void Positioning(Transform t, float offset)
-        //{
-        //    t.position = m_LeftSide + offset * Vector3.down;
-        //}
+                m_ItemSize = m_TemplateSizes[datum.template];
+                var itemSize = m_ItemSize.Value;
 
-        //public void OnStopScrolling()
-        //{
-        //    if (scrollOffset > 0)
-        //    {
-        //        scrollOffset = 0;
-        //    }
-        //    if (m_ScrollReturn < float.MaxValue)
-        //    {
-        //        scrollOffset = m_ScrollReturn;
-        //        m_ScrollReturn = float.MaxValue;
-        //    }
-        //}
+                var localOffset = offset + scrollOffset;
+                if (localOffset + itemSize.z < 0 || localOffset > m_Size.z)
+                    Recycle(index);
+                else
+                    UpdateNestedItem(datum, order++, localOffset, depth, ref doneSettling);
 
-        //void RecycleChildren(AdvancedListItemData data)
-        //{
-        //    foreach (var child in data.children)
-        //    {
-        //        RecycleItem(child.template, child.item);
-        //        child.item = null;
-        //        if (child.children != null)
-        //            RecycleChildren(child);
-        //    }
-        //}
+                offset += itemSize.z;
 
-        //protected override void RecycleItem(string template, MonoBehaviour item)
-        //{
-        //    base.RecycleItem(template, item);
-        //    try
-        //    { //Try the cast. If it fails we just have a category
-        //        AdvancedListItemChild aItem = (AdvancedListItemChild) item;
-        //        if (!aItem) return;
-        //        m_Models[aItem.data.model].pool.Add(aItem.model);
-        //        aItem.model.transform.parent = null;
-        //        aItem.model.SetActive(false);
-        //    } catch
-        //    {
-        //    }
-        //}
+                if (datum.children != null)
+                {
+                    if (expanded)
+                        UpdateRecursively(datum.children, ref order, ref offset, ref doneSettling, depth + 1);
+                    else
+                        RecycleChildren(datum);
+                }
+            }
+        }
+
+        protected override void RecycleItem(string template, AdvancedListItem item)
+        {
+            base.RecycleItem(template, item);
+
+            var aItem = item as AdvancedListItemChild;
+
+            if (!aItem)
+                return;
+
+            var model = aItem.model;
+            m_ModelDictionary[aItem.data.model].pool.Add(model);
+            model.transform.parent = transform;
+            model.SetActive(false);
+        }
 
         public GameObject GetModel(string name)
         {
-            if (!m_Models.ContainsKey(name))
+            if (!m_ModelDictionary.ContainsKey(name))
             {
                 Debug.LogWarning("Cannot get model, " + name + " doesn't exist");
                 return null;
             }
-            GameObject model = null;
-            if (m_Models[name].pool.Count > 0)
+
+            GameObject model;
+            if (m_ModelDictionary[name].pool.Count > 0)
             {
-                model = m_Models[name].pool[0];
-                m_Models[name].pool.RemoveAt(0);
+                model = m_ModelDictionary[name].pool[0];
+                m_ModelDictionary[name].pool.RemoveAt(0);
 
                 model.gameObject.SetActive(true);
-            } else
+            }
+            else
             {
-                model = Instantiate(m_Models[name].prefab);
+                model = Instantiate(m_ModelDictionary[name].prefab);
                 model.transform.parent = transform;
             }
+
             return model;
         }
 
@@ -193,6 +158,7 @@ namespace ListView
             {
                 if (prefab == null)
                     Debug.LogError("Template prefab cannot be null");
+
                 this.prefab = prefab;
             }
         }

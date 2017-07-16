@@ -1,9 +1,29 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ListView
 {
-    class ListViewController : ListViewController<ListViewItemInspectorData, ListViewItem, int> { }
+    class ListViewController : ListViewController<ListViewItemInspectorData, ListViewItem, int>
+    {
+        [SerializeField]
+        float m_Range;
+
+        [SerializeField]
+        ListViewItemInspectorData[] m_BasicData;
+
+        void Awake()
+        {
+            size = Vector3.forward * m_Range;
+
+            for (var i = 0; i < m_BasicData.Length; i++)
+            {
+                m_BasicData[i].idx = i;
+            }
+
+            data = m_BasicData.ToList();
+        }
+    }
 
     public abstract class ListViewController<TData, TItem, TIndex> : ListViewControllerBase
         where TData : ListViewItemData<TIndex>
@@ -29,8 +49,8 @@ namespace ListView
             }
         }
 
-        [SerializeField]
         protected List<TData> m_Data;
+        TItem m_LastUpdatedItemItem;
 
         protected readonly Dictionary<string, ListViewItemTemplate<TItem>> m_TemplateDictionary = new Dictionary<string, ListViewItemTemplate<TItem>>();
         protected readonly Dictionary<TIndex, TItem> m_ListItems = new Dictionary<TIndex, TItem>();
@@ -61,14 +81,14 @@ namespace ListView
 
             var offset = 0f;
             var order = 0;
-            Debug.Log(m_Data);
             for (var i = 0; i < m_Data.Count; i++)
             {
                 var datum = m_Data[i];
-                if (offset + scrollOffset + itemSize.z < 0 || offset + scrollOffset > m_Size.z)
+                var localOffset = offset + scrollOffset;
+                if (localOffset + itemSize.z < 0 || localOffset > m_Size.z)
                     Recycle(datum.index);
                 else
-                    UpdateVisibleItem(datum, order++, i * itemSize.z + m_ScrollOffset, ref doneSettling);
+                    UpdateVisibleItem(datum, order++, localOffset, ref doneSettling);
 
                 offset += itemSize.z;
             }
@@ -109,6 +129,7 @@ namespace ListView
                 m_ListItems[index] = item;
             }
 
+            m_LastUpdatedItemItem = item;
             UpdateItem(item.transform, order, offset, ref doneSettling);
         }
 
@@ -170,6 +191,9 @@ namespace ListView
             item.startSettling = StartSettling;
             item.endSettling = EndSettling;
             item.getListItem = GetListItem;
+
+            if (m_LastUpdatedItemItem)
+                item.transform.position = m_LastUpdatedItemItem.transform.position;
 
             return item;
         }

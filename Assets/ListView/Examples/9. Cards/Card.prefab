@@ -16,11 +16,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012057023828}
-  - 23: {fileID: 23000012776301490}
-  - 102: {fileID: 102000010715190424}
+  - component: {fileID: 4000012057023828}
+  - component: {fileID: 23000012776301490}
+  - component: {fileID: 102000010715190424}
   m_Layer: 0
   m_Name: BotNum
   m_TagString: Untagged
@@ -33,14 +33,14 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012021889942}
-  - 33: {fileID: 33000013780683588}
-  - 23: {fileID: 23000013838468774}
-  - 95: {fileID: 95000010960346690}
-  - 65: {fileID: 65000010673609026}
-  - 114: {fileID: 114000010727036300}
+  - component: {fileID: 4000012021889942}
+  - component: {fileID: 33000013780683588}
+  - component: {fileID: 23000013838468774}
+  - component: {fileID: 95000010960346690}
+  - component: {fileID: 65000010673609026}
+  - component: {fileID: 114000010727036300}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -53,11 +53,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014209414856}
-  - 23: {fileID: 23000013097009544}
-  - 102: {fileID: 102000013169189846}
+  - component: {fileID: 4000014209414856}
+  - component: {fileID: 23000013097009544}
+  - component: {fileID: 102000013169189846}
   m_Layer: 0
   m_Name: TopNum
   m_TagString: Untagged
@@ -120,7 +120,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 222ff6f876dc7234cae0746f20486efb, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -128,12 +130,13 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!23 &23000013097009544
 MeshRenderer:
@@ -149,7 +152,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 222ff6f876dc7234cae0746f20486efb, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -157,12 +162,13 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!23 &23000013838468774
 MeshRenderer:
@@ -178,7 +184,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 4013486c90d873a4d829b7fe94ddad54, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -186,12 +194,13 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000013780683588
 MeshFilter:
@@ -282,9 +291,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa03ebda87b91494a8b59adda8c4f649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topNum: {fileID: 102000013169189846}
-  botNum: {fileID: 102000010715190424}
-  centerScale: 3
+  m_TopNum: {fileID: 102000013169189846}
+  m_BotNum: {fileID: 102000010715190424}
+  m_CenterScale: 3
   m_Diamond: {fileID: 1000012067369654, guid: 0c100134f42ccc74abf25e20fa838fcc, type: 2}
   m_Heart: {fileID: 1000013015378978, guid: 1ed4c43a441bddf489af9705fb40fde6, type: 2}
   m_Spade: {fileID: 1000010369621484, guid: 7dbe1d718b3913f48b512a72e6becddf, type: 2}

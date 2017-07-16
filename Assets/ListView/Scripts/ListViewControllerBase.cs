@@ -6,12 +6,6 @@ namespace ListView
 {
     public abstract class ListViewControllerBase : MonoBehaviour, IScrollHandler
     {
-        public float scrollOffset
-        {
-            get { return m_ScrollOffset; }
-            set { m_ScrollOffset = value; }
-        }
-
         [Tooltip("Distance (in meters) we have scrolled from initial position")]
         [SerializeField]
         protected float m_ScrollOffset;
@@ -28,35 +22,22 @@ namespace ListView
         [SerializeField]
         float m_MaxMomentum = 2f;
 
-        [Tooltip("Item template prefabs (at least one is required)")]
-        [SerializeField]
-        protected GameObject[] m_Templates;
-
         [SerializeField]
         protected float m_SettleSpeed = 0.4f;
-
-        public float scrollSpeed
-        {
-            get { return m_ScrollSpeed; }
-            set { m_ScrollSpeed = value; }
-        }
 
         [SerializeField]
         float m_ScrollSpeed = 0.3f;
 
+        [Tooltip("Item template prefabs (at least one is required)")]
+        [SerializeField]
+        protected GameObject[] m_Templates;
+
+        [Tooltip("Whether to interpolate item positions")]
+        [SerializeField]
+        protected bool m_EnableSettling = true;
+
         protected bool m_Settling;
         event Action settlingCompleted;
-
-        public Vector3 itemSize
-        {
-            get
-            {
-                if (!m_ItemSize.HasValue && m_Templates.Length > 0)
-                    m_ItemSize = GetObjectSize(m_Templates[0]);
-
-                return m_ItemSize ?? Vector3.zero;
-            }
-        }
 
         protected Vector3? m_ItemSize;
 
@@ -71,6 +52,29 @@ namespace ListView
         protected Vector3 m_Extents;
 
         protected abstract float listHeight { get; }
+
+        public float scrollOffset
+        {
+            get { return m_ScrollOffset; }
+            set { m_ScrollOffset = value; }
+        }
+
+        public float scrollSpeed
+        {
+            get { return m_ScrollSpeed; }
+            set { m_ScrollSpeed = value; }
+        }
+
+        public Vector3 itemSize
+        {
+            get
+            {
+                if (!m_ItemSize.HasValue && m_Templates != null & m_Templates.Length > 0)
+                    m_ItemSize = GetObjectSize(m_Templates[0]);
+
+                return m_ItemSize ?? Vector3.zero;
+            }
+        }
 
         public Vector3 size
         {
@@ -147,19 +151,19 @@ namespace ListView
 
             // Snap back if list scrolled too far
             if (listHeight > 0 && -m_ScrollOffset >= listHeight)
-                m_ScrollReturn = itemSize.z - listHeight + epsilon;
+                m_ScrollReturn = -listHeight + epsilon;
         }
 
         protected abstract void UpdateItems();
 
         public virtual void ScrollNext()
         {
-            m_ScrollOffset += m_ItemSize.Value.z;
+            m_ScrollOffset -= m_ItemSize.Value.z;
         }
 
         public virtual void ScrollPrev()
         {
-            m_ScrollOffset -= m_ItemSize.Value.z;
+            m_ScrollOffset += m_ItemSize.Value.z;
         }
 
         public virtual void ScrollTo(int index)
@@ -176,7 +180,7 @@ namespace ListView
 
         protected virtual void UpdateItemTransform(Transform t, int order, Vector3 targetPosition, Quaternion targetRotation, bool dontSettle, ref bool doneSettling)
         {
-            if (m_Settling && !dontSettle)
+            if (m_Settling && !dontSettle && m_EnableSettling)
             {
                 t.localPosition = Vector3.Lerp(t.localPosition, targetPosition, m_SettleSpeed);
                 if (t.localPosition != targetPosition)

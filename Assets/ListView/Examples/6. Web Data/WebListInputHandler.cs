@@ -4,18 +4,20 @@ namespace ListView
 {
     public class WebListInputHandler : ListViewScroller
     {
+        [SerializeField]
         public float scrollWheelCoeff = 1;
+
         float m_ListDepth;
 
         protected override void HandleInput()
         {
-            Vector3 screenPoint = Input.mousePosition;
+            var screenPoint = Input.mousePosition;
             if (Input.GetMouseButton(0))
             {
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
                 {
-                    var item = hit.collider.GetComponent<JSONItem>();
+                    var item = hit.collider.GetComponent<WebItem>();
                     if (item)
                     {
                         m_ListDepth = (hit.point - Camera.main.transform.position).magnitude;
@@ -25,7 +27,7 @@ namespace ListView
                 }
             }
             screenPoint.z = m_ListDepth;
-            Vector3 scrollPosition = Camera.main.ScreenToWorldPoint(screenPoint);
+            var scrollPosition = Camera.main.ScreenToWorldPoint(screenPoint);
             Scroll(scrollPosition);
             if (!Input.GetMouseButton(0))
                 StopScrolling();

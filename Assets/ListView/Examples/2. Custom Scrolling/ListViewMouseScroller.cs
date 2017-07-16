@@ -8,13 +8,13 @@ namespace ListView
 
         protected override void HandleInput()
         {
-            Vector3 screenPoint = Input.mousePosition;
+            var screenPoint = Input.mousePosition;
             if (Input.GetMouseButton(0))
             {
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
                 {
-                    ListViewItemBase item = hit.collider.GetComponent<ListViewItemBase>();
+                    var item = hit.collider.GetComponent<ListViewItemBase>();
                     if (item)
                     {
                         m_ListDepth = (hit.point - Camera.main.transform.position).magnitude;
@@ -26,6 +26,7 @@ namespace ListView
             {
                 StopScrolling();
             }
+
             screenPoint.z = m_ListDepth;
             Scroll(Camera.main.ScreenToWorldPoint(screenPoint));
         }

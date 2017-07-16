@@ -17,5 +17,8 @@ namespace ListView
     }
 
     [System.Serializable]
-    public class ListViewItemInspectorData : ListViewItemData<int> { }
+    public class ListViewItemInspectorData : ListViewItemData<int>
+    {
+        public int idx { set { index = value; } }
+    }
 }

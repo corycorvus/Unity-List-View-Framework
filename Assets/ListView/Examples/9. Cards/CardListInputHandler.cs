@@ -39,10 +39,10 @@ namespace ListView
                 listView.scrollOffset = m_StartOffset + position.x - m_StartPosition.x;
         }
 
-        protected override void StopScrolling()
-        {
-            base.StopScrolling();
-            ((CardList) listView).OnStopScrolling();
-        }
+        //protected override void StopScrolling()
+        //{
+        //    base.StopScrolling();
+        //    ((CardList) listView).OnStopScrolling();
+        //}
     }
 }

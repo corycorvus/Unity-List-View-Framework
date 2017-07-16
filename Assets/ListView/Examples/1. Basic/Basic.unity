@@ -209,13 +209,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1228353304}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &1228353307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,16 +228,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ScrollOffset: 0
-  m_Padding: 0.01
+  m_Padding: 0.5
   m_ScrollDamping: 5
   m_MaxMomentum: 2
+  m_SettleSpeed: 0.4
+  m_ScrollSpeed: 5
   m_Templates:
   - {fileID: 1000011849705152, guid: e1b3aad422724bc418c20601cbc2a554, type: 2}
   - {fileID: 1000013007981344, guid: a3acef1a4406372499f75782dae9e5a0, type: 2}
   - {fileID: 1000012703891656, guid: cf793b8efcdf75645ad0b38e1d517179, type: 2}
-  m_SettleSpeed: 0.4
-  m_ScrollSpeed: 0.3
-  m_Data:
+  m_EnableSettling: 0
+  m_Range: 10
+  m_BasicData:
   - m_Template: DefaultCapsule
   - m_Template: DefaultCube
   - m_Template: DefaultSphere
@@ -257,8 +259,7 @@ MonoBehaviour:
   - m_Template: DefaultCapsule
   - m_Template: DefaultSphere
   - m_Template: DefaultCube
-  scrollSpeed: 10
-  skin: {fileID: 11400000, guid: 5ba77d7064f923144be57e426aa75e87, type: 2}
+  m_Skin: {fileID: 11400000, guid: 5ba77d7064f923144be57e426aa75e87, type: 2}
 --- !u!1 &2099730579
 GameObject:
   m_ObjectHideFlags: 0

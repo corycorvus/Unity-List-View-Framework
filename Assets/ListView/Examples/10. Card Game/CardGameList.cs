@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = System.Random;
 
 namespace ListView
@@ -12,16 +13,19 @@ namespace ListView
         public float interpolate = 15f;
         public float recycleDuration = 0.3f;
         public int dealMax = 5;
-        public Transform deck;
 
-        Vector3 m_StartPos;
+        [FormerlySerializedAs("deck")]
+        [SerializeField]
+        public Transform m_Deck;
 
+        [SerializeField]
+        float m_Range;
 
         protected override void Setup()
         {
             base.Setup();
 
-            var dataList = new List<CardData>(52);
+            data = new List<CardData>(52);
             for (var i = 0; i < 4; i++)
             {
                 for (var j = 1; j < 14; j++)
@@ -47,59 +51,71 @@ namespace ListView
                     }
                     card.suit = (Card.Suit) i;
                     card.template = defaultTemplate;
-                    dataList.Add(card);
+                    card.idx = i * 14 + j;
+                    data.Add(card);
                 }
             }
-            Shuffle(dataList);
+            Shuffle();
+
+            m_Range = 0;
+            m_ScrollOffset = itemSize.x * 0.5f;
         }
 
-        void Shuffle(List<CardData> dataList)
+        void Shuffle()
         {
             var rnd = new Random();
-            data = dataList.OrderBy(x => rnd.Next()).ToList();
+            data = data.OrderBy(x => rnd.Next()).ToList();
         }
 
         void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(transform.position + Vector3.left * (itemSize.x * dealMax - listHeight) * 0.5f,
-                new Vector3(listHeight, itemSize.y, itemSize.z));
+            Gizmos.DrawWireCube(transform.position + Vector3.left * (itemSize.x * dealMax - m_Range) * 0.5f,
+                new Vector3(m_Range, itemSize.y, itemSize.z));
         }
 
         protected override void UpdateItems()
         {
-            m_StartPos = transform.position + Vector3.left * itemSize.x * dealMax * 0.5f;
+            m_StartPosition = Vector3.left * itemSize.x * dealMax * 0.5f;
+            size = m_Range * Vector3.right;
             var doneSettling = true;
             var offset = 0f;
             for (var i = 0; i < data.Count; i++)
             {
                 var datum = data[i];
-                if (offset + scrollOffset + itemSize.z < 0)
+                var localOffset = offset + scrollOffset;
+                if (localOffset < 0)
                 {
                     ExtremeLeft(datum);
                 }
-                else if (offset + scrollOffset > m_Size.z)
+                else if (localOffset > m_Size.x)
                 {
                     //End the m_List one item early
                     ExtremeRight(datum);
                 }
                 else
                 {
-                    ListMiddle(datum, i, offset, ref doneSettling);
+                    ListMiddle(datum, i, localOffset, ref doneSettling);
                 }
+
+                offset += itemSize.x;
             }
 
             if (m_Settling && doneSettling)
                 EndSettling();
         }
 
+        public override void OnScrollEnded()
+        {
+        }
+
         void ExtremeLeft(CardData data)
         {
-            RecycleItemAnimated(data, deck);
+            RecycleItemAnimated(data, m_Deck);
         }
 
         void ExtremeRight(CardData data)
         {
-            RecycleItemAnimated(data, deck);
+            RecycleItemAnimated(data, m_Deck);
         }
 
         void ListMiddle(CardData data, int order, float offset, ref bool doneSettling)
@@ -109,10 +125,11 @@ namespace ListView
             if (!m_ListItems.TryGetValue(index, out card))
             {
                 card = GetItem(data);
-                card.transform.position = deck.transform.position;
-                card.transform.rotation = deck.transform.rotation;
+                card.transform.position = m_Deck.transform.position;
+                card.transform.rotation = m_Deck.transform.rotation;
                 m_ListItems[index] = card;
             }
+
             UpdateItem(card.transform, order, offset, ref doneSettling);
         }
 
@@ -182,64 +199,68 @@ namespace ListView
 
         protected override void UpdateItem(Transform t, int order, float offset, ref bool doneSettling)
         {
-            t.position = Vector3.Lerp(t.position, m_StartPos + (offset * itemSize.x + scrollOffset) * Vector3.right,
-                interpolate * Time.deltaTime);
-            t.rotation = Quaternion.Lerp(t.rotation, Quaternion.identity, interpolate * Time.deltaTime);
+            var targetPosition = m_StartPosition + offset * Vector3.right;
+            var targetRotation = Quaternion.identity;
+            UpdateItemTransform(t, order, targetPosition, targetRotation, false, ref doneSettling);
         }
 
         void RecycleCard(CardData data)
         {
-            RecycleItemAnimated(data, deck);
+            RecycleItemAnimated(data, m_Deck);
         }
 
-        public CardData DrawCard()
+        public Card DrawCard(out CardData cardData)
         {
             if (data.Count == 0)
             {
                 Debug.Log("Out of Cards");
+                cardData = null;
                 return null;
             }
 
-            var cardData = data.Last();
+            cardData = data.Last();
             data.Remove(cardData);
 
             var index = cardData.index;
             Card card;
-            if (!m_ListItems.TryGetValue(index, out card))
-            {
+            if (m_ListItems.TryGetValue(index, out card))
+                m_ListItems.Remove(index);
+            else
                 card = GetItem(cardData);
-                m_ListItems[index] = card;
-            }
 
-            return cardData;
+            return card;
         }
 
         public void RemoveCardFromDeck(CardData cardData)
         {
             data.Remove(cardData);
+            m_ListItems.Remove(cardData.index);
+            if (m_Range > 0)
+                m_Range -= itemSize.x;
         }
 
-        public void AddCardToDeck(CardData cardData)
+        public void AddCardToDeck(Card card)
         {
+            var cardData = card.data;
             data.Add(cardData);
 
-            // TODO: Remove if unnecessary
-            //cardData.item.transform.parent = transform;
+            m_ListItems[cardData.index] = card;
+            card.transform.parent = transform;
             RecycleCard(cardData);
         }
 
         public void Deal()
         {
-            //range += itemSize.x;
-            if (listHeight >= itemSize.x * (dealMax + 1))
+            m_Range += itemSize.x;
+            if (m_Range >= itemSize.x * (dealMax + 1))
             {
                 scrollOffset -= itemSize.x * dealMax;
-                //range = 0;
+                m_Range = 0;
             }
             if (-scrollOffset >= (data.Count - dealMax) * itemSize.x)
             {
                 //reshuffle
-                Shuffle(new List<CardData>(data));
+                Shuffle();
                 scrollOffset = itemSize.x * 0.5f;
             }
         }

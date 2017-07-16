@@ -4,12 +4,13 @@ namespace ListView
 {
     class JSONItem : ListViewItem<JSONItemData, int>
     {
-        public TextMesh label;
+        [SerializeField]
+        TextMesh m_Label;
 
         public override void Setup(JSONItemData data)
         {
             base.Setup(data);
-            label.text = data.text;
+            m_Label.text = data.text;
         }
     }
 

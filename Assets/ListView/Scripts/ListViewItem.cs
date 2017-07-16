@@ -19,4 +19,15 @@ namespace ListView
             this.data = data;
         }
     }
+
+    public class NestedListViewItem<TData, TIndex> : ListViewItem<TData, TIndex> where TData : ListViewItemData<TIndex>
+    {
+        public event Action<TData> toggleExpanded;
+
+        public void ToggleExpanded()
+        {
+            if (toggleExpanded != null)
+                toggleExpanded(data);
+        }
+    }
 }

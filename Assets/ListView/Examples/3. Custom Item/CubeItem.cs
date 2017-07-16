@@ -4,12 +4,13 @@ namespace ListView
 {
     class CubeItem : ListViewItem<CubeItemData, int>
     {
-        public TextMesh label;
+        [SerializeField]
+        TextMesh m_Label;
 
         public override void Setup(CubeItemData data)
         {
             base.Setup(data);
-            label.text = data.text;
+            m_Label.text = data.text;
         }
     }
 
@@ -17,5 +18,6 @@ namespace ListView
     class CubeItemData : ListViewItemData<int>
     {
         public string text;
+        public int idx { set { index = value; } }
     }
 }

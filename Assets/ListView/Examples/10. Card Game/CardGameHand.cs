@@ -6,44 +6,57 @@ namespace ListView
 {
     class CardGameHand : ListViewController<CardData, Card, int>
     {
-        public float radius = 0.25f;
-        public float interpolate = 15f;
-        public float stackOffset = 0.01f;
-        public int handSize = 5;
-        public float indicatorTime = 0.5f;
-        public CardGameList controller;
-        public Renderer indicator;
+        [SerializeField]
+        public float m_Radius = 0.25f;
+
+        [SerializeField]
+        public float m_Interpolate = 15f;
+
+        [SerializeField]
+        public float m_StackOffset = 0.01f;
+
+        [SerializeField]
+        public int m_HandSize = 5;
+
+        [SerializeField]
+        public float m_IndicatorTime = 0.5f;
+
+        [SerializeField]
+        CardGameList m_Controller;
+
+        [SerializeField]
+        Renderer m_Indicator;
 
         float m_CardDegrees, m_CardsOffset;
 
-        new Vector3 itemSize
-        {
-            get { return controller.itemSize; }
-        }
+        new Vector3 itemSize { get { return m_Controller.itemSize; } }
 
         protected override void Setup()
         {
-            data = new List<CardData>(handSize);
-            for (int i = 0; i < handSize; i++)
+            base.Setup();
+            data = new List<CardData>(m_HandSize);
+            for (var i = 0; i < m_HandSize; i++)
             {
-                var card = controller.DrawCard();
-                m_ListItems[card.index].transform.parent = transform;
-                data.Add(card);
+                CardData cardData;
+                var card = m_Controller.DrawCard(out cardData);
+                card.transform.parent = transform;
+                m_ListItems[cardData.index] = card;
+                data.Add(cardData);
             }
         }
 
         protected override void ComputeConditions()
         {
-            m_CardDegrees = Mathf.Atan((itemSize.x + m_Padding) / radius) * Mathf.Rad2Deg;
+            m_CardDegrees = Mathf.Atan((itemSize.x + m_Padding) / m_Radius) * Mathf.Rad2Deg;
             m_CardsOffset = m_CardDegrees * (data.Count - 1) * 0.5f;
         }
 
         protected override void UpdateItems()
         {
-            DebugDrawCircle(radius - itemSize.z * 0.5f, 24, transform.position, transform.rotation);
-            DebugDrawCircle(radius + itemSize.z * 0.5f, 24, transform.position, transform.rotation);
+            DebugDrawCircle(m_Radius - itemSize.z * 0.5f, 24, transform.position, transform.rotation);
+            DebugDrawCircle(m_Radius + itemSize.z * 0.5f, 24, transform.position, transform.rotation);
             var doneSettling = true;
-            for (int i = 0; i < data.Count; i++)
+            for (var i = 0; i < data.Count; i++)
             {
                 UpdateVisibleItem(data[i], i, i, ref doneSettling);
             }
@@ -53,10 +66,10 @@ namespace ListView
         {
             Quaternion sliceRotation = Quaternion.AngleAxis(90 - m_CardsOffset + m_CardDegrees * offset, Vector3.up);
             t.localPosition = Vector3.Lerp(t.localPosition,
-                sliceRotation * (Vector3.left * radius)
-                + Vector3.up * stackOffset * offset, interpolate * Time.deltaTime);
+                sliceRotation * (Vector3.left * m_Radius)
+                + Vector3.up * m_StackOffset * offset, m_Interpolate * Time.deltaTime);
             t.localRotation = Quaternion.Lerp(t.localRotation, sliceRotation * Quaternion.AngleAxis(90, Vector3.down),
-                interpolate * Time.deltaTime);
+                m_Interpolate * Time.deltaTime);
         }
 
         public static void DebugDrawCircle(float radius, int slices, Vector3 center)
@@ -78,12 +91,12 @@ namespace ListView
 
         public void DrawCard(Card item)
         {
-            if (data.Count < handSize)
+            if (data.Count < m_HandSize)
             {
-                if (item.data == null)
-                    Debug.Log("aaah!");
-                data.Add(item.data);
-                controller.RemoveCardFromDeck(item.data);
+                var cardData = item.data;
+                data.Add(cardData);
+                m_ListItems[cardData.index] = item;
+                m_Controller.RemoveCardFromDeck(cardData);
                 item.transform.parent = transform;
             }
             else
@@ -95,10 +108,13 @@ namespace ListView
 
         public void ReturnCard(Card item)
         {
-            if (data.Contains(item.data))
+            var cardData = item.data;
+            if (data.Contains(cardData))
             {
-                data.Remove(item.data);
-                controller.AddCardToDeck(item.data);
+                data.Remove(cardData);
+                var card = m_ListItems[cardData.index];
+                m_ListItems.Remove(cardData.index);
+                m_Controller.AddCardToDeck(card);
             }
             else
             {
@@ -114,9 +130,9 @@ namespace ListView
 
         IEnumerator DoIndicate()
         {
-            indicator.enabled = true;
-            yield return new WaitForSeconds(indicatorTime);
-            indicator.enabled = false;
+            m_Indicator.enabled = true;
+            yield return new WaitForSeconds(m_IndicatorTime);
+            m_Indicator.enabled = false;
         }
     }
 }

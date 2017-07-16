@@ -4,7 +4,8 @@ namespace ListView
 {
     class CardGameInputHandler : ListViewInputHandler
     {
-        public CardGameHand hand;
+        [SerializeField]
+        CardGameHand m_Hand;
 
         protected override void HandleInput()
         {
@@ -24,9 +25,9 @@ namespace ListView
                         if (item)
                         {
                             if (item.transform.parent == listView.transform)
-                                hand.DrawCard(item);
-                            else if (item.transform.parent == hand.transform)
-                                hand.ReturnCard(item);
+                                m_Hand.DrawCard(item);
+                            else if (item.transform.parent == m_Hand.transform)
+                                m_Hand.ReturnCard(item);
                         }
                     }
                 }

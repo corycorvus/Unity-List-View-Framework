@@ -7,22 +7,35 @@ namespace ListView
 {
     class JSONList : ListViewController<JSONItemData, JSONItem, int>
     {
-        public string dataFile;
-        public string defaultTemplate;
+        [SerializeField]
+        string m_DataFile;
+
+        [SerializeField]
+        string m_DefaultTemplate;
+
+        [SerializeField]
+        float m_Range;
+
+        void Awake()
+        {
+            size = Vector3.forward * m_Range;
+        }
 
         protected override void Setup()
         {
             base.Setup();
-            var text = Resources.Load<TextAsset>(dataFile);
+            var text = Resources.Load<TextAsset>(m_DataFile);
             if (text)
             {
                 var obj = new JSONObject(text.text);
+                var length = obj.Count;
                 data = new List<JSONItemData>(obj.Count);
-                for (var i = 0; i < data.Count; i++)
+                for (var i = 0; i < length; i++)
                 {
                     var child = new JSONItemData();
                     child.FromJSON(obj[i]);
-                    child.template = defaultTemplate;
+                    child.template = m_DefaultTemplate;
+                    child.idx = i;
                     data.Add(child);
                 }
             }

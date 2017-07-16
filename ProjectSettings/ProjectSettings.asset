@@ -663,10 +663,10 @@ PlayerSettings:
     UNet: 1
     Unity_Ads: 0
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
-  cloudProjectId: 3a3e94a8-29f2-4650-8490-186af3a8307b
-  projectName: list view
-  organizationId: timoni-west
+  apiCompatibilityLevel: 3
+  cloudProjectId: 
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

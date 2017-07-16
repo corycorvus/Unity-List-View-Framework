@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ListView
 {
@@ -12,13 +13,26 @@ namespace ListView
             CLUBS
         }
 
-        public TextMesh topNum, botNum;
-        public float centerScale = 3f;
+        [SerializeField]
+        TextMesh m_TopNum;
 
-        [SerializeField] GameObject m_Diamond;
-        [SerializeField] GameObject m_Heart;
-        [SerializeField] GameObject m_Spade;
-        [SerializeField] GameObject m_Club;
+        [SerializeField]
+        TextMesh m_BotNum;
+
+        [SerializeField]
+        float m_CenterScale = 3f;
+
+        [SerializeField]
+        GameObject m_Diamond;
+
+        [SerializeField]
+        GameObject m_Heart;
+
+        [SerializeField]
+        GameObject m_Spade;
+
+        [SerializeField]
+        GameObject m_Club;
 
         Vector3 m_Size;
         const float k_QuadOffset = 0.001f; //Local y offset for placing quads
@@ -26,8 +40,8 @@ namespace ListView
         public override void Setup(CardData data)
         {
             base.Setup(data);
-            topNum.text = data.value;
-            botNum.text = data.value;
+            m_TopNum.text = data.value;
+            m_BotNum.text = data.value;
 
             m_Size = GetComponent<BoxCollider>().size;
 
@@ -38,7 +52,7 @@ namespace ListView
         {
             foreach (Transform child in trans)
             {
-                if (child.gameObject != botNum.gameObject && child.gameObject != topNum.gameObject)
+                if (child.gameObject != m_BotNum.gameObject && child.gameObject != m_TopNum.gameObject)
                     Destroy(child.gameObject);
             }
         }
@@ -69,33 +83,31 @@ namespace ListView
                 case "Q":
                 case "A":
                 {
-                    GameObject quad = AddQuad(prefab);
-                    quad.transform.localScale *= centerScale;
+                    var quad = AddQuad(prefab);
+                    quad.transform.localScale *= m_CenterScale;
                     quad.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);
                     break;
                 }
                 default:
                 {
-                    int valNum = System.Convert.ToInt32(data.value);
-                    float divisionY = 0;
-                    float divisionX = 0;
-                    int cols = (valNum < 4 ? 1 : 2);
-                    int rows = valNum / cols;
+                    var valNum = System.Convert.ToInt32(data.value);
+                    var cols = (valNum < 4 ? 1 : 2);
+                    var rows = valNum / cols;
                     if (valNum == 8)
                         rows = 3;
-                    divisionY = 1f / (rows + 1);
-                    divisionX = 1f / (cols + 1);
-                    for (int j = 0; j < cols; j++)
+                    var divisionY = 1f / (rows + 1);
+                    var divisionX = 1f / (cols + 1);
+                    for (var j = 0; j < cols; j++)
                     {
-                        for (int i = 0; i < rows; i++)
+                        for (var i = 0; i < rows; i++)
                         {
-                            GameObject quad = AddQuad(prefab);
+                            var quad = AddQuad(prefab);
                             quad.transform.localPosition += Vector3.forward * m_Size.z * (divisionY * (i + 1) - 0.5f);
                             quad.transform.localPosition += Vector3.right * m_Size.x * (divisionX * (j + 1) - 0.5f);
                             quad.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);
                         }
                     }
-                    int leftover = 0;
+                    var leftover = 0;
                     switch (valNum)
                     {
                         case 5:
@@ -119,25 +131,25 @@ namespace ListView
                             leftover = 3;
                             break;
                     }
-                    for (int i = 0; i < leftover; i += 2)
+                    for (var i = 0; i < leftover; i += 2)
                     {
-                        GameObject quad = AddQuad(prefab);
+                        var quad = AddQuad(prefab);
                         quad.transform.localPosition -= Vector3.forward * m_Size.z * (divisionY * (i - 1));
                         quad.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);
                     }
                     break;
                 }
             }
-            topNum.text = data.value;
-            topNum.color = color;
-            botNum.text = data.value;
-            botNum.color = color;
+            m_TopNum.text = data.value;
+            m_TopNum.color = color;
+            m_BotNum.text = data.value;
+            m_BotNum.color = color;
         }
 
         GameObject AddQuad(GameObject prefab)
         {
             //NOTE: If we were really concerned about performance, we could pool the quads
-            GameObject quad = Instantiate(prefab);
+            var quad = Instantiate(prefab);
             quad.transform.parent = transform;
             quad.transform.localPosition = Vector3.up * k_QuadOffset;
             return quad;
@@ -150,5 +162,6 @@ namespace ListView
         //Ace is 1, King is 13
         public string value;
         public Card.Suit suit;
+        public int idx { set { index = value; } }
     }
 }

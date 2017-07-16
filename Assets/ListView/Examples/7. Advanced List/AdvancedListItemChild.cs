@@ -4,20 +4,25 @@ namespace ListView
 {
     class AdvancedListItemChild : AdvancedListItem
     {
-        public TextMesh description;
-        public Transform modelTransform;
+        [SerializeField]
+        TextMesh m_Description;
 
-        public GameObject model;
+        [SerializeField]
+        Transform m_ModelTransform;
+
+        GameObject m_Model;
+
+        public GameObject model { get { return m_Model; } }
 
         public override void Setup(AdvancedListItemData data)
         {
             base.Setup(data);
-            description.text = data.description;
-            model = m_List.GetModel(data.model);
-            model.transform.parent = modelTransform;
-            model.transform.localPosition = Vector3.zero;
-            model.transform.localScale = Vector3.one;
-            model.transform.localRotation = Quaternion.identity;
+            m_Description.text = data.description;
+            m_Model = m_List.GetModel(data.model);
+            m_Model.transform.parent = m_ModelTransform;
+            m_Model.transform.localPosition = Vector3.zero;
+            m_Model.transform.localScale = Vector3.one;
+            m_Model.transform.localRotation = Quaternion.identity;
         }
     }
 }

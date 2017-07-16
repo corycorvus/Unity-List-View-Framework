@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class MouseWiggle : MonoBehaviour
 {
-	public float speed = -0.1f;
-	public Transform pivot;
-	void Update () {
-		transform.RotateAround(pivot.position, Vector3.up, Input.GetAxis("Mouse X") * Time.deltaTime * speed);
-	}
+    [SerializeField]
+    float m_Speed = -2f;
+
+    [SerializeField]
+    Transform m_Pivot;
+
+    void Update()
+    {
+        transform.RotateAround(m_Pivot.position, Vector3.up, Input.GetAxis("Mouse X") * Time.deltaTime * m_Speed);
+    }
 }

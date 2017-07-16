@@ -5,7 +5,7 @@ using System.IO;
 
 public static class SQLitePostBuild
 {
-    [PostProcessBuildAttribute(0)]
+    [PostProcessBuild(0)]
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuildProject)
     {
         switch (target)

@@ -1,75 +1,45 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ListView
 {
-    class NestedJSONList : ListViewController<NestedJSONItemData, NestedJSONItem, int>
+    class NestedJSONList : NestedListViewController<NestedJSONItemData, NestedJSONItem, int>
     {
-        public string dataFile;
-        public string defaultTemplate;
+        [SerializeField]
+        string m_DataFile;
 
-        //protected override void Setup()
-        //{
-        //    base.Setup();
-        //    TextAsset text = Resources.Load<TextAsset>(dataFile);
-        //    if (text)
-        //    {
-        //        JSONObject obj = new JSONObject(text.text);
-        //        data = new NestedJSONItemData[obj.Count];
-        //        for (int i = 0; i < data.Count; i++)
-        //        {
-        //            data[i] = new NestedJSONItemData();
-        //            data[i].FromJSON(obj[i], defaultTemplate);
-        //        }
-        //    }
-        //    else data = new NestedJSONItemData[0];
-        //}
+        [SerializeField]
+        string m_DefaultTemplate;
 
-        //protected override void UpdateItems()
-        //{
-        //    int count = 0;
-        //    UpdateRecursively(data, ref count);
-        //}
+        [SerializeField]
+        float m_Range;
 
-        //void UpdateRecursively(NestedJSONItemData[] data, ref int count)
-        //{
-        //    foreach (var item in data)
-        //    {
-        //        if (count + m_DataOffset < 0)
-        //        {
-        //            ExtremeLeft(item);
-        //        }
-        //        else if (count + m_DataOffset > m_NumItems)
-        //        {
-        //            ExtremeRight(item);
-        //        }
-        //        else
-        //        {
-        //            ListMiddle(item, count + m_DataOffset);
-        //        }
-        //        count++;
-        //        if (item.children != null)
-        //        {
-        //            if (item.expanded)
-        //            {
-        //                UpdateRecursively(item.children, ref count);
-        //            }
-        //            else
-        //            {
-        //                RecycleChildren(item);
-        //            }
-        //        }
-        //    }
-        //}
+        void Awake()
+        {
+            size = Vector3.forward * m_Range;
+        }
 
-        //void RecycleChildren(NestedJSONItemData data)
-        //{
-        //    foreach (var child in data.children)
-        //    {
-        //        RecycleItem(child.template, child.item);
-        //        child.item = null;
-        //        if (child.children != null)
-        //            RecycleChildren(child);
-        //    }
-        //}
+        protected override void Setup()
+        {
+            base.Setup();
+            var text = Resources.Load<TextAsset>(m_DataFile);
+            if (text)
+            {
+                var obj = new JSONObject(text.text);
+                var length = obj.Count;
+                data = new List<NestedJSONItemData>(length);
+                var index = 0;
+                for (var i = 0; i < length; i++)
+                {
+                    var item = new NestedJSONItemData();
+                    item.FromJSON(obj[i], m_DefaultTemplate, ref index);
+                    data.Add(item);
+                }
+            }
+            else
+            {
+                data = null;
+            }
+        }
     }
 }

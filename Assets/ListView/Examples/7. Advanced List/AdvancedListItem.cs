@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace ListView
 {
-    class AdvancedListItem : ListViewItem<AdvancedListItemData, int>
+    class AdvancedListItem : NestedListViewItem<AdvancedListItemData, int>
     {
-        public TextMesh title;
+        [SerializeField]
+        TextMesh m_Title;
 
         protected AdvancedList m_List;
 
@@ -13,17 +14,17 @@ namespace ListView
         {
             base.Setup(data);
             m_List = data.list;
-            title.text = data.title;
+            m_Title.text = data.title;
         }
     }
 
     //[System.Serializable]     //Will cause warnings, but helpful for debugging
-    class AdvancedListItemData : ListViewItemNestedData<AdvancedListItemData, int>
+    class AdvancedListItemData : NestedListViewItemData<AdvancedListItemData, int>
     {
         public string title, description, model;
         public AdvancedList list;
 
-        public void FromJSON(JSONObject obj, AdvancedList list)
+        public void FromJSON(JSONObject obj, AdvancedList list, ref int index)
         {
             this.list = list;
             obj.GetField(ref title, "title");
@@ -32,16 +33,19 @@ namespace ListView
             var template = "";
             obj.GetField(ref template, "template");
             this.template = template;
+            this.index = index;
+            var idx = index + 1;
             obj.GetField("children", delegate(JSONObject _children)
             {
                 children = new List<AdvancedListItemData>(_children.Count);
                 for (var i = 0; i < _children.Count; i++)
                 {
                     var child = new AdvancedListItemData();
-                    child.FromJSON(_children[i], list);
+                    child.FromJSON(_children[i], list, ref idx);
                     children.Add(child);
                 }
             });
+            index = idx;
         }
     }
 }

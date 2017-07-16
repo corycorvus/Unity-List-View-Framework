@@ -16,13 +16,13 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014194213002}
-  - 33: {fileID: 33000010681652112}
-  - 136: {fileID: 136000013798025718}
-  - 23: {fileID: 23000013907700998}
-  - 114: {fileID: 114000012698691320}
+  - component: {fileID: 4000014194213002}
+  - component: {fileID: 33000010681652112}
+  - component: {fileID: 136000013798025718}
+  - component: {fileID: 23000013907700998}
+  - component: {fileID: 114000012698691320}
   m_Layer: 0
   m_Name: DefaultCapsule
   m_TagString: Untagged
@@ -57,7 +57,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -65,12 +67,13 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000010681652112
 MeshFilter:
@@ -90,9 +93,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2552c8cbe6f364498c1061a98fa856, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    template: 
-    item: {fileID: 0}
 --- !u!136 &136000013798025718
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Mono.Data.Sqlite;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Data;
 using System.IO;
 using System.Threading;
-using Mono.Data.Sqlite;
+using UnityEngine;
 
 //Borrows from http://answers.unity3d.com/questions/743400/database-sqlite-setup-for-unity.html
 //Dictionary from https://wordnet.princeton.edu/
@@ -19,17 +19,23 @@ namespace ListView
         [SerializeField]
         int m_BatchSize = 15;
 
-        public float scrollDamping = 15f;
-        public float maxMomentum = 200f;
-        public string defaultTemplate = "DictionaryItem";
-        public GameObject loadingIndicator;
-
-        public int maxWordCharacters = 30; //Wrap word after 30 characters
-        public int definitionCharacterWrap = 40; //Wrap definition after 40 characters
-        public int maxDefinitionLines = 4; //Max 4 lines per definition
+        [SerializeField]
+        string m_DefaultTemplate = "DictionaryItem";
 
         [SerializeField]
-        float m_Range;
+        GameObject m_LoadingIndicator;
+
+        [SerializeField]
+        int m_MaxWordCharacters = 30; //Wrap word after 30 characters
+
+        [SerializeField]
+        int m_DefinitionCharacterWrap = 40; //Wrap definition after 40 characters
+
+        [SerializeField]
+        int m_MaxDefinitionLines = 4; //Max 4 lines per definition
+
+        [SerializeField]
+        float m_Range = 12f;
 
         delegate void WordsResult(List<DictionaryListItemData> words);
 
@@ -62,7 +68,7 @@ namespace ListView
             m_DBConnection = new SqliteConnection(conn);
             m_DBConnection.Open(); //Open connection to the database.
 
-            if (maxWordCharacters < 4)
+            if (m_MaxWordCharacters < 4)
             {
                 Debug.LogError("Max word length must be > 3");
             }
@@ -125,13 +131,13 @@ namespace ListView
                         var id = new KeyValuePair<int, int>(wordid, synsetid);
                         var lemma = reader.GetString(2);
                         var definition = reader.GetString(3);
-                        var word = new DictionaryListItemData { idx = id, template = defaultTemplate};
+                        var word = new DictionaryListItemData { idx = id, template = m_DefaultTemplate};
                         words.Add(word);
 
                         //truncate word if necessary
-                        if (lemma.Length > maxWordCharacters)
+                        if (lemma.Length > m_MaxWordCharacters)
                         {
-                            lemma = lemma.Substring(0, maxWordCharacters - 3) + "...";
+                            lemma = lemma.Substring(0, m_MaxWordCharacters - 3) + "...";
                         }
                         words[count].word = lemma;
 
@@ -142,9 +148,9 @@ namespace ListView
                         foreach (var wrd in wrds)
                         {
                             charCount += wrd.Length + 1;
-                            if (charCount > definitionCharacterWrap)
+                            if (charCount > m_DefinitionCharacterWrap)
                             { //Guesstimate
-                                if (++lineCount >= maxDefinitionLines)
+                                if (++lineCount >= m_MaxDefinitionLines)
                                 {
                                     words[count].definition += "...";
                                     break;
@@ -276,13 +282,13 @@ namespace ListView
         {
             if (data == null || data.Count == 0 || m_Loading)
             {
-                loadingIndicator.SetActive(true);
+                m_LoadingIndicator.SetActive(true);
                 return;
             }
 
             base.UpdateItems();
 
-            loadingIndicator.SetActive(false);
+            m_LoadingIndicator.SetActive(false);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class ListViewExpander : ListViewInputHandler
+    class ListViewExpander : ListViewInputHandler
     {
         protected override void HandleInput()
         {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.14078856, g: 0.16848701, b: 0.14155045, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listView: {fileID: 1228353305}
-  scrollWheelCoeff: 1
+  m_ScrollWheelCoeff: 1
 --- !u!1 &2099730579
 GameObject:
   m_ObjectHideFlags: 0

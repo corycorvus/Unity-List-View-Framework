@@ -16,9 +16,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012539605122}
+  - component: {fileID: 4000012539605122}
   m_Layer: 8
   m_Name: LeftWrist
   m_TagString: Untagged
@@ -31,9 +31,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010589934278}
+  - component: {fileID: 4000010589934278}
   m_Layer: 8
   m_Name: LeftLowerArmIK
   m_TagString: Untagged
@@ -46,9 +46,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012371748676}
+  - component: {fileID: 4000012371748676}
   m_Layer: 8
   m_Name: RightWristFK
   m_TagString: Untagged
@@ -61,9 +61,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010027199974}
+  - component: {fileID: 4000010027199974}
   m_Layer: 8
   m_Name: RightWristEnd
   m_TagString: Untagged
@@ -76,9 +76,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012798524834}
+  - component: {fileID: 4000012798524834}
   m_Layer: 8
   m_Name: LeftEar
   m_TagString: Untagged
@@ -91,9 +91,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010985685576}
+  - component: {fileID: 4000010985685576}
   m_Layer: 8
   m_Name: LeftFoot
   m_TagString: Untagged
@@ -106,9 +106,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013915745982}
+  - component: {fileID: 4000013915745982}
   m_Layer: 8
   m_Name: RightUpperArmIK
   m_TagString: Untagged
@@ -121,9 +121,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011900430474}
+  - component: {fileID: 4000011900430474}
   m_Layer: 8
   m_Name: LeftLeg
   m_TagString: Untagged
@@ -136,9 +136,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010697060408}
+  - component: {fileID: 4000010697060408}
   m_Layer: 8
   m_Name: RightLowerArmFK
   m_TagString: Untagged
@@ -151,9 +151,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011640143106}
+  - component: {fileID: 4000011640143106}
   m_Layer: 8
   m_Name: LeftLowerArm
   m_TagString: Untagged
@@ -166,9 +166,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010938778476}
+  - component: {fileID: 4000010938778476}
   m_Layer: 8
   m_Name: RightLeg
   m_TagString: Untagged
@@ -181,9 +181,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013800794358}
+  - component: {fileID: 4000013800794358}
   m_Layer: 8
   m_Name: LeftLowerArmFK
   m_TagString: Untagged
@@ -196,9 +196,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010723527908}
+  - component: {fileID: 4000010723527908}
   m_Layer: 8
   m_Name: RightFootEnd
   m_TagString: Untagged
@@ -211,9 +211,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013966469684}
+  - component: {fileID: 4000013966469684}
   m_Layer: 8
   m_Name: RightUpperArmFK
   m_TagString: Untagged
@@ -226,9 +226,9 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013551355902}
+  - component: {fileID: 4000013551355902}
   m_Layer: 8
   m_Name: ZomBear
   m_TagString: Untagged
@@ -241,9 +241,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012141429324}
+  - component: {fileID: 4000012141429324}
   m_Layer: 8
   m_Name: LeftUpperArmIK
   m_TagString: Untagged
@@ -256,9 +256,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014268862668}
+  - component: {fileID: 4000014268862668}
   m_Layer: 8
   m_Name: RightFoot
   m_TagString: Untagged
@@ -271,9 +271,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013099165314}
+  - component: {fileID: 4000013099165314}
   m_Layer: 8
   m_Name: Hips
   m_TagString: Untagged
@@ -286,9 +286,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012273526084}
+  - component: {fileID: 4000012273526084}
   m_Layer: 8
   m_Name: Ctrl_Grp
   m_TagString: Untagged
@@ -301,9 +301,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014252918408}
+  - component: {fileID: 4000014252918408}
   m_Layer: 8
   m_Name: HeadEnd
   m_TagString: Untagged
@@ -316,9 +316,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014144555922}
+  - component: {fileID: 4000014144555922}
   m_Layer: 8
   m_Name: RightEarEnd
   m_TagString: Untagged
@@ -331,9 +331,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010396170938}
+  - component: {fileID: 4000010396170938}
   m_Layer: 8
   m_Name: RightWristIK
   m_TagString: Untagged
@@ -346,9 +346,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011957670590}
+  - component: {fileID: 4000011957670590}
   m_Layer: 8
   m_Name: LeftUpperArm
   m_TagString: Untagged
@@ -361,9 +361,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011921208644}
+  - component: {fileID: 4000011921208644}
   m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
@@ -376,9 +376,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012943341364}
+  - component: {fileID: 4000012943341364}
   m_Layer: 8
   m_Name: RightLowerArm
   m_TagString: Untagged
@@ -391,11 +391,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013310098898}
-  - 33: {fileID: 33000013166545628}
-  - 23: {fileID: 23000013200019382}
+  - component: {fileID: 4000013310098898}
+  - component: {fileID: 33000013166545628}
+  - component: {fileID: 23000013200019382}
   m_Layer: 8
   m_Name: Zombear
   m_TagString: Untagged
@@ -408,9 +408,9 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013329140456}
+  - component: {fileID: 4000013329140456}
   m_Layer: 8
   m_Name: ZomBear
   m_TagString: Untagged
@@ -423,9 +423,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011341897170}
+  - component: {fileID: 4000011341897170}
   m_Layer: 8
   m_Name: LeftWristFK
   m_TagString: Untagged
@@ -438,9 +438,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010992983092}
+  - component: {fileID: 4000010992983092}
   m_Layer: 8
   m_Name: RightLowerArmIK
   m_TagString: Untagged
@@ -453,9 +453,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013052853150}
+  - component: {fileID: 4000013052853150}
   m_Layer: 8
   m_Name: RightWrist
   m_TagString: Untagged
@@ -468,9 +468,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010575954122}
+  - component: {fileID: 4000010575954122}
   m_Layer: 8
   m_Name: LeftFootEnd
   m_TagString: Untagged
@@ -483,9 +483,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010204803166}
+  - component: {fileID: 4000010204803166}
   m_Layer: 8
   m_Name: LeftEarEnd
   m_TagString: Untagged
@@ -498,9 +498,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011240832120}
+  - component: {fileID: 4000011240832120}
   m_Layer: 8
   m_Name: LeftWristIK
   m_TagString: Untagged
@@ -513,9 +513,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012577438210}
+  - component: {fileID: 4000012577438210}
   m_Layer: 8
   m_Name: LeftWristEnd
   m_TagString: Untagged
@@ -528,9 +528,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011703648322}
+  - component: {fileID: 4000011703648322}
   m_Layer: 8
   m_Name: Spine
   m_TagString: Untagged
@@ -543,9 +543,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012439621418}
+  - component: {fileID: 4000012439621418}
   m_Layer: 8
   m_Name: RightUpperArm
   m_TagString: Untagged
@@ -558,9 +558,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012058904284}
+  - component: {fileID: 4000012058904284}
   m_Layer: 8
   m_Name: LeftUpperArmFK
   m_TagString: Untagged
@@ -573,9 +573,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012731237896}
+  - component: {fileID: 4000012731237896}
   m_Layer: 8
   m_Name: RightEar
   m_TagString: Untagged
@@ -588,9 +588,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014221973142}
+  - component: {fileID: 4000014221973142}
   m_Layer: 8
   m_Name: Root
   m_TagString: Untagged
@@ -1158,7 +1158,9 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 0e554613ca2e81743a244dd20c8d44a0, type: 2}
   - {fileID: 2100000, guid: 51d14e0fd3936be48bf8d5031d3e24c7, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -1166,12 +1168,13 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000013166545628
 MeshFilter:

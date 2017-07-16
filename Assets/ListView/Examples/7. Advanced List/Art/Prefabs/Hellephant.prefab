@@ -16,9 +16,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011344478126}
+  - component: {fileID: 4000011344478126}
   m_Layer: 8
   m_Name: Ctrl_Grp
   m_TagString: Untagged
@@ -31,9 +31,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010783860638}
+  - component: {fileID: 4000010783860638}
   m_Layer: 8
   m_Name: Trunk3
   m_TagString: Untagged
@@ -46,9 +46,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013465980576}
+  - component: {fileID: 4000013465980576}
   m_Layer: 8
   m_Name: Spine2
   m_TagString: Untagged
@@ -61,9 +61,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011323197904}
+  - component: {fileID: 4000011323197904}
   m_Layer: 8
   m_Name: Root
   m_TagString: Untagged
@@ -76,9 +76,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013314242192}
+  - component: {fileID: 4000013314242192}
   m_Layer: 8
   m_Name: LeftLeg
   m_TagString: Untagged
@@ -91,9 +91,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010822008100}
+  - component: {fileID: 4000010822008100}
   m_Layer: 8
   m_Name: RightFoot
   m_TagString: Untagged
@@ -106,9 +106,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012588755838}
+  - component: {fileID: 4000012588755838}
   m_Layer: 8
   m_Name: TrunkEnd
   m_TagString: Untagged
@@ -121,9 +121,9 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012588335366}
+  - component: {fileID: 4000012588335366}
   m_Layer: 8
   m_Name: Hellephant
   m_TagString: Untagged
@@ -136,9 +136,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012920999314}
+  - component: {fileID: 4000012920999314}
   m_Layer: 8
   m_Name: RightEarEnd
   m_TagString: Untagged
@@ -151,9 +151,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010181131548}
+  - component: {fileID: 4000010181131548}
   m_Layer: 8
   m_Name: LeftFootEnd
   m_TagString: Untagged
@@ -166,9 +166,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013095151050}
+  - component: {fileID: 4000013095151050}
   m_Layer: 8
   m_Name: RightLeg
   m_TagString: Untagged
@@ -181,9 +181,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011228085282}
+  - component: {fileID: 4000011228085282}
   m_Layer: 8
   m_Name: Spine1
   m_TagString: Untagged
@@ -196,9 +196,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011335404854}
+  - component: {fileID: 4000011335404854}
   m_Layer: 8
   m_Name: Trunk2
   m_TagString: Untagged
@@ -211,9 +211,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011766249768}
+  - component: {fileID: 4000011766249768}
   m_Layer: 8
   m_Name: SpineEnd
   m_TagString: Untagged
@@ -226,9 +226,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014131951858}
+  - component: {fileID: 4000014131951858}
   m_Layer: 8
   m_Name: RightFootEnd
   m_TagString: Untagged
@@ -241,9 +241,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013591751072}
+  - component: {fileID: 4000013591751072}
   m_Layer: 8
   m_Name: RightEar2
   m_TagString: Untagged
@@ -256,9 +256,9 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010796609056}
+  - component: {fileID: 4000010796609056}
   m_Layer: 8
   m_Name: Hellephant
   m_TagString: Untagged
@@ -271,11 +271,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010880882982}
-  - 33: {fileID: 33000014289154518}
-  - 23: {fileID: 23000012389072712}
+  - component: {fileID: 4000010880882982}
+  - component: {fileID: 33000014289154518}
+  - component: {fileID: 23000012389072712}
   m_Layer: 8
   m_Name: Hellephant
   m_TagString: Untagged
@@ -288,9 +288,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013338269012}
+  - component: {fileID: 4000013338269012}
   m_Layer: 8
   m_Name: Trunk1
   m_TagString: Untagged
@@ -303,9 +303,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012279861918}
+  - component: {fileID: 4000012279861918}
   m_Layer: 8
   m_Name: LeftFoot
   m_TagString: Untagged
@@ -318,9 +318,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012275483926}
+  - component: {fileID: 4000012275483926}
   m_Layer: 8
   m_Name: Hips
   m_TagString: Untagged
@@ -333,9 +333,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011812472248}
+  - component: {fileID: 4000011812472248}
   m_Layer: 8
   m_Name: RightEar1
   m_TagString: Untagged
@@ -348,9 +348,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014016428140}
+  - component: {fileID: 4000014016428140}
   m_Layer: 8
   m_Name: LeftEarEnd
   m_TagString: Untagged
@@ -363,9 +363,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011472537608}
+  - component: {fileID: 4000011472537608}
   m_Layer: 8
   m_Name: LeftEar2
   m_TagString: Untagged
@@ -378,9 +378,9 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012386645362}
+  - component: {fileID: 4000012386645362}
   m_Layer: 8
   m_Name: LeftEar1
   m_TagString: Untagged
@@ -752,7 +752,9 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 20c2c861010d0ce49a4716087f02535e, type: 2}
   - {fileID: 2100000, guid: 51d14e0fd3936be48bf8d5031d3e24c7, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -760,12 +762,13 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000014289154518
 MeshFilter:

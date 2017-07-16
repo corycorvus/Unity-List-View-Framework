@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MouseWiggle : MonoBehaviour
+class MouseWiggle : MonoBehaviour
 {
     [SerializeField]
     float m_Speed = -2f;

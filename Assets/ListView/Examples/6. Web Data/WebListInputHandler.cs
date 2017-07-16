@@ -5,7 +5,7 @@ namespace ListView
     public class WebListInputHandler : ListViewScroller
     {
         [SerializeField]
-        public float scrollWheelCoeff = 1;
+        float m_ScrollWheelCoeff = 1;
 
         float m_ListDepth;
 
@@ -32,7 +32,7 @@ namespace ListView
             if (!Input.GetMouseButton(0))
                 StopScrolling();
 
-            listView.scrollOffset += Input.mouseScrollDelta.y * scrollWheelCoeff;
+            listView.scrollOffset += Input.mouseScrollDelta.y * m_ScrollWheelCoeff;
         }
 
         protected override void Scroll(Vector3 position)

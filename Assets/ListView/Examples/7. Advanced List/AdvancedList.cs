@@ -1,18 +1,29 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ListView
 {
     class AdvancedList : NestedListViewController<AdvancedListItemData, AdvancedListItem, int>
     {
-        [FormerlySerializedAs("dataFile")]
-        [SerializeField]
-        public string m_DataFile;
+        class ModelPool
+        {
+            public readonly GameObject prefab;
+            public readonly List<GameObject> pool = new List<GameObject>();
 
-        [FormerlySerializedAs("models")]
+            public ModelPool(GameObject prefab)
+            {
+                if (prefab == null)
+                    Debug.LogError("Template prefab cannot be null");
+
+                this.prefab = prefab;
+            }
+        }
+
         [SerializeField]
-        public GameObject[] m_Models;
+        string m_DataFile;
+
+        [SerializeField]
+        GameObject[] m_Models;
 
         [SerializeField]
         float m_Range;
@@ -147,20 +158,6 @@ namespace ListView
             }
 
             return model;
-        }
-
-        class ModelPool
-        {
-            public readonly GameObject prefab;
-            public readonly List<GameObject> pool = new List<GameObject>();
-
-            public ModelPool(GameObject prefab)
-            {
-                if (prefab == null)
-                    Debug.LogError("Template prefab cannot be null");
-
-                this.prefab = prefab;
-            }
         }
     }
 }

@@ -16,9 +16,9 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010494556684}
+  - component: {fileID: 4000010494556684}
   m_Layer: 8
   m_Name: Clock
   m_TagString: Untagged
@@ -31,12 +31,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013636079326}
-  - 33: {fileID: 33000012457549310}
-  - 23: {fileID: 23000011407073034}
-  - 95: {fileID: 95000011434818056}
+  - component: {fileID: 4000013636079326}
+  - component: {fileID: 33000012457549310}
+  - component: {fileID: 23000011407073034}
+  - component: {fileID: 95000011434818056}
   m_Layer: 8
   m_Name: Clock
   m_TagString: Untagged
@@ -86,7 +86,9 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 90b239ceb2940124bb7636ec3c63615d, type: 2}
   - {fileID: 2100000, guid: f5f51bb814b2fb344a86d653efa7820a, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -94,12 +96,13 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000012457549310
 MeshFilter:

@@ -2,21 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = System.Random;
 
 namespace ListView
 {
     class CardGameList : ListViewController<CardData, Card, int>
     {
-        public string defaultTemplate = "Card";
-        public float interpolate = 15f;
-        public float recycleDuration = 0.3f;
-        public int dealMax = 5;
-
-        [FormerlySerializedAs("deck")]
         [SerializeField]
-        public Transform m_Deck;
+        string m_DefaultTemplate = "Card";
+
+        [SerializeField]
+        float m_RecycleDuration = 0.3f;
+
+        [SerializeField]
+        int m_DealMax = 5;
+
+        [SerializeField]
+        Transform m_Deck;
 
         [SerializeField]
         float m_Range;
@@ -50,7 +52,7 @@ namespace ListView
                             break;
                     }
                     card.suit = (Card.Suit) i;
-                    card.template = defaultTemplate;
+                    card.template = m_DefaultTemplate;
                     card.idx = i * 14 + j;
                     data.Add(card);
                 }
@@ -69,13 +71,13 @@ namespace ListView
 
         void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(transform.position + Vector3.left * (itemSize.x * dealMax - m_Range) * 0.5f,
+            Gizmos.DrawWireCube(transform.position + Vector3.left * (itemSize.x * m_DealMax - m_Range) * 0.5f,
                 new Vector3(m_Range, itemSize.y, itemSize.z));
         }
 
         protected override void UpdateItems()
         {
-            m_StartPosition = Vector3.left * itemSize.x * dealMax * 0.5f;
+            m_StartPosition = Vector3.left * itemSize.x * m_DealMax * 0.5f;
             size = m_Range * Vector3.right;
             var doneSettling = true;
             var offset = 0f;
@@ -177,7 +179,7 @@ namespace ListView
             m_ListItems.Remove(index);
 
             card.GetComponent<BoxCollider>().enabled = false; //Disable collider so we can't click the card during the animation
-            StartCoroutine(RecycleAnimation(card, data.template, destination, recycleDuration));
+            StartCoroutine(RecycleAnimation(card, data.template, destination, m_RecycleDuration));
         }
 
         IEnumerator RecycleAnimation(Card card, string template, Transform destination, float speed)
@@ -252,12 +254,12 @@ namespace ListView
         public void Deal()
         {
             m_Range += itemSize.x;
-            if (m_Range >= itemSize.x * (dealMax + 1))
+            if (m_Range >= itemSize.x * (m_DealMax + 1))
             {
-                scrollOffset -= itemSize.x * dealMax;
+                scrollOffset -= itemSize.x * m_DealMax;
                 m_Range = 0;
             }
-            if (-scrollOffset >= (data.Count - dealMax) * itemSize.x)
+            if (-scrollOffset >= (data.Count - m_DealMax) * itemSize.x)
             {
                 //reshuffle
                 Shuffle();

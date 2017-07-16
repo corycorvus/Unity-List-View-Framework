@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ListViewScroller : MonoBehaviour, IScrollHandler
+class ListViewScroller : MonoBehaviour, IScrollHandler
 {
     [SerializeField]
     ListViewControllerBase m_ListView;

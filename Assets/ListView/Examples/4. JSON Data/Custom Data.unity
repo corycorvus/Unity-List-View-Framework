@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.10346956, g: 0.12842697, b: 0.15691113, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -306,8 +306,8 @@ MonoBehaviour:
   m_Templates:
   - {fileID: 1000013007981344, guid: 6830b7eb34433234783af4a20a8b299c, type: 2}
   m_EnableSettling: 1
-  dataFile: data
-  defaultTemplate: JSONCube
+  m_DataFile: 
+  m_DefaultTemplate: 
   m_Range: 10
 --- !u!4 &1228353306
 Transform:

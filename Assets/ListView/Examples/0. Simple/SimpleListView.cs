@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class SimpleListView : MonoBehaviour
+    class SimpleListView : MonoBehaviour
     {
         [SerializeField]
         GameObject m_Prefab;

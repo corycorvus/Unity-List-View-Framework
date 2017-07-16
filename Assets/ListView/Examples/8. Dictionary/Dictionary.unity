@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.10346956, g: 0.12842697, b: 0.15691113, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -308,21 +308,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScrollOffset: 0
   m_Padding: 0.05
-  m_ScrollDamping: 5
-  m_MaxMomentum: 2
+  m_ScrollDamping: 50
+  m_MaxMomentum: 200
   m_SettleSpeed: 0.4
   m_ScrollSpeed: 0.3
   m_Templates:
   - {fileID: 1000014193321398, guid: 7fa2f4ae3828363479b560c5fb7f52ee, type: 2}
   m_EnableSettling: 1
-  batchSize: 150
-  scrollDamping: 50
-  maxMomentum: 200
-  defaultTemplate: DictionaryItem
-  loadingIndicator: {fileID: 1802064371}
-  maxWordCharacters: 30
-  definitionCharacterWrap: 40
-  maxDefinitionLines: 4
+  m_BatchSize: 15
+  m_DefaultTemplate: DictionaryItem
+  m_LoadingIndicator: {fileID: 1802064371}
+  m_MaxWordCharacters: 30
+  m_DefinitionCharacterWrap: 40
+  m_MaxDefinitionLines: 4
   m_Range: 12
 --- !u!4 &1228353306
 Transform:

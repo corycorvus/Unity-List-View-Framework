@@ -7,19 +7,19 @@ namespace ListView
     class CardGameHand : ListViewController<CardData, Card, int>
     {
         [SerializeField]
-        public float m_Radius = 0.25f;
+        float m_Radius = 0.25f;
 
         [SerializeField]
-        public float m_Interpolate = 15f;
+        float m_Interpolate = 15f;
 
         [SerializeField]
-        public float m_StackOffset = 0.01f;
+        float m_StackOffset = 0.01f;
 
         [SerializeField]
-        public int m_HandSize = 5;
+        int m_HandSize = 5;
 
         [SerializeField]
-        public float m_IndicatorTime = 0.5f;
+        float m_IndicatorTime = 0.5f;
 
         [SerializeField]
         CardGameList m_Controller;
@@ -64,7 +64,7 @@ namespace ListView
 
         protected override void UpdateItem(Transform t, int offset, float f, ref bool doneSettling)
         {
-            Quaternion sliceRotation = Quaternion.AngleAxis(90 - m_CardsOffset + m_CardDegrees * offset, Vector3.up);
+            var sliceRotation = Quaternion.AngleAxis(90 - m_CardsOffset + m_CardDegrees * offset, Vector3.up);
             t.localPosition = Vector3.Lerp(t.localPosition,
                 sliceRotation * (Vector3.left * m_Radius)
                 + Vector3.up * m_StackOffset * offset, m_Interpolate * Time.deltaTime);

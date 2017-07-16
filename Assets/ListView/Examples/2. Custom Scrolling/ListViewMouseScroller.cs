@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class ListViewMouseScroller : ListViewScroller
+    class ListViewMouseScroller : ListViewScroller
     {
         float m_ListDepth;
 
@@ -22,7 +22,8 @@ namespace ListView
                         StartScrolling(Camera.main.ScreenToWorldPoint(screenPoint));
                     }
                 }
-            } else
+            }
+            else
             {
                 StopScrolling();
             }

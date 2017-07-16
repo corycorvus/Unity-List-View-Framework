@@ -2,7 +2,7 @@
 
 namespace ListView
 {
-    public class AdvancedListInputHandler : ListViewScroller
+    class AdvancedListInputHandler : ListViewScroller
     {
         [SerializeField]
         float m_ScrollThreshold = 0.2f;
